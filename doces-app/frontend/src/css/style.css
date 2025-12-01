@@ -1,0 +1,877 @@
+/* ===========================
+   DocesApp — style.css
+   Mobile-version, paleta suave
+   =========================== */
+
+   /* Reset simples */
+   * { box-sizing: border-box; margin: 0; padding: 0; }
+   html, body, #root { height: 100%; }
+   img { max-width: 100%; display: block; }
+
+   /* ---------------------------
+   Variáveis de tema (fácil alteração)
+   --------------------------- */
+
+   :root{
+    --bg: #fff8f2;          /* fundo geral - creme */
+    --surface: #fff;        /* cards */
+    --primary: #d97ea3;     /* rosa doce (botões) */
+    --accent: #8b5e3c;      /* marrom chocolate (textos importantes) */
+    --muted: #6b6b6b;       /*textos secundários*/
+    --sucess: #5bb18a;      /* sucesso / confirm */
+    --danger: #e06464;      /* alerta */
+    --glass: rgba(139,94,60,0.06); /*leve textura */
+    --radius: 12px;
+    --gap: 12px;
+    --sidebar-w: 72px;
+    --sidebar-w-expanded: 220px;
+    --card-shadow: 0 8px 24px rgba(15,15,15,0.06);
+    --transition: 180ms ease;
+    --font-sans: 'Poppins', system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+   }
+
+   /* Tipografia Base */
+   html { font-size: 16px; }
+   body {
+    font-family: var(--font-sans);
+    background: var(--bg);
+    color: var(--accent);
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    line-height: 1.35;
+    padding: 14px;
+
+/* títulos */
+.page-title, h1 { font-weight: 700; font-family: var(--font); }
+
+/* subtítulos / botões */
+.menu-item, .btn { font-weight: 600; font-family: var(--font); }
+
+/* texto normal */
+body, p, small { font-weight: 400; font-family: var(--font); }
+
+/* legendas */
+.small, .muted { font-weight: 300; font-family: var(--font); }
+
+   }
+
+   /* App layout: sidebar + main */
+   .app{
+    display: flex;
+    gap: var(--gap);
+    min-height: calc(100vh - 28px);
+   }
+
+   /* ---------- SIDEBAR ---------- */ 
+   .sidebar{
+    width: var(--sidebar-w);
+    background: linear-gradient(180deg, rgba(217,126,163,0.04), rgba(139,94,60,0.03));
+    border-radius: 14px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    transition: width var(--transition);
+    box-shadow: var(--card-shadow);
+   }
+
+   /* Marca (logo e nome) */
+   .brand{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+   }
+   .logo i{ font-size: 28px; color: var(--primary); }
+   .brand-name{
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--accent);
+    opacity: 0.95;
+    text-align: center;
+   }
+
+   /* Menu sidebar */
+   .menu {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+   }
+
+   .menu-item{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: var(--accent);
+    padding: 10px 8px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background var(--transition), transform var(--transition);
+    justify-content: center;
+   }
+   .menu-item i { font-size: 18px; }
+   .menu-item span { display: none; font-size: 0.95rem; }
+   .menu-item:hover {background: var(--glass); transition: translateY(-2px); }
+   .menu-item.active { background: linear-gradient(90deg, rgba(217,126,163,0.12), rgba(139,94,60,0.06)); color: var(--primary); }
+
+   /* Footer pequeno da sidebar */
+   .sidebar-footer { margin-top: auto; font-size: 0.75rem; color: var(--muted); }
+
+   /* ---------- MAIN AREA ---------- */
+   .main{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+   }
+
+   /* Topbar */
+   .topbar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.75), rgba(255,255,255,0.6));
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+   }
+
+   .top-left{ display: flex; align-items: center; gap: 12px; }
+   #toggle-sidebar{
+    background: transparent; border: none; cursor: pointer; font-size: 18px; padding: 6px; border-radius: 8px;
+   }
+
+   .page-title{ font-size: 1.05rem; color: var(--accent); font-weight: 700; }
+
+   /* Pesquisar / User area */
+   .top-right{ display: flex; align-items: center; gap: 10px; }
+   .pesquisar input{
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(0,0,0,0.06);
+    min-width: 160px;
+    background: transparent;
+   }
+
+   .user-btn{
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: none;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+   }
+
+   /* Content area */
+   .content{ display: flex; flex-direction: column; gap: var(--gap); padding: 6px 0; }
+
+   /* Row system */
+   .row{ display: flex; flex-direction: column; gap: 12px; }
+
+   /* Cards */
+   .card{
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 12px;
+    box-shadow: var(--card-shadow);
+    border: 1px solid rgba(0,0,0,0.03);
+   }
+
+   /* Overview row items */
+   .overview{ gap: 12px; }
+   .summary ul{ list-style: none; display: flex; flex-direction: column; gap: 8pxpx; }
+   .summary strong{ color: var(--accent); }
+   .quick-actions .actions{ display: flex; gap: 10px; flex-wrap: wrap; }
+
+   /* Botões */
+   .btn{
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: none;
+    background: var(--primary);
+    color: white;
+    cursor: pointer;
+    transition: transform var(--transition), box-shadow var(--transition);
+   }
+
+   .btn-outline{
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid rgba(139,94,60,0.12);
+   }
+
+   .btn:hover{ transform: translateY(-2px); box-shadow: 0 10px 24px rgba(21,21,21,0.06); }
+   .btn-primary{ background: var(--accent); }
+
+   /* PVD area layout: produtos + carrinho */
+   .pvd-area{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+   }
+
+   /* esquerda (produtos) */
+   .pvd-left { min-height: 220px; }
+   .lista-produtos { display: grid; gap: 10px; grid-template-columns: repeat(2, 1fr); }
+   .produtos {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+    border-radius: 10px;
+    border: 1px solid rgba(0,0,0,0.03);
+   }
+
+   .produtos .meta{ flex: 1; }
+   .produtos .meta h4{ font-size: 0.95rem; color: var(--accent); margin-bottom: 4px; }
+   .produtos .meta small{ color: var(--muted); display: block; }
+   .produtos .price{ font-weight: 700; color: var(--accent); }
+
+   /* botão adicionar */
+   .produtos .add-btn{
+    padding: 6px 8px;
+    border-radius: 8px;
+    border: none;
+    background: var(--primary);
+    color: white;
+    cursor: pointer;
+   }
+
+   /* direita (carrinho) */
+   .pvd-right{ min-width: 200px; display: flex; flex-direction: column; gap: 10px; }
+   .cart{ min-height: 120px; border-radius: 8px; border: 1px dashed rgba(0,0,0,0.05); background: linear-gradient(180deg, rgba(255,255,255,0.2)); }
+   .cart-empty{ color: var(--muted); text-align: center; padding: 18px 6px; }
+   .cart-item{ display: flex; justify-content: space-between; gap: 8px; align-items: center; padding: 8px; border-radius: 8px; background: rgba(0,0,0,0.01); margin-bottom: 8px; }
+   .cart-footer{ display: flex; flex-direction: column; gap: 8px; margin-top: auto; }
+
+   /* total */
+   .total{ font-size: 1rem; color: var(--accent); display: flex; justify-content: space-between; align-items: center; }
+
+   /*page footer */
+   .page-footer{ text-align: center; color: var(--muted); font-size: 0.9rem; margin-top: 10px; }
+
+   /* ---------------------------
+   RESPONSIVO (de mobile para desktop)
+   --------------------------- */
+   @media(min-width: 720px){
+    .app{ gap: 18px; }
+    .sidebar{ width: var(--sidebar-w); align-items: flex-start; padding: 16px; }
+    .brand{ flex-direction: row; align-items: center; gap: 10px; }
+    .brand-name{ display: block; }
+    .menu-item{ justify-content: flex-start; padding: 10px 12px; }
+    .menu-item span{ display: inline; }
+    .main{ padding-left: 0; }
+
+    /*overview lado-a-lado */
+    .overview{ flex-direction: row; }
+    .overview .card{ flex: 1; }
+
+    /*PDV: mostrar produtos  e carrinho lado a lado */
+    .pvd-area{ flex-direction: row; align-items: flex-start; }
+    .pvd-left{ flex: 2; }
+    .lista-produtos{ grid-template-columns: repeat(3, 1fr); }
+    .pvd-right{ flex: 1; min-width: 260px; }
+
+    /* sidebar expandida on hover (desktop) */
+    .sidebar:hover{ width: var(--sidebar-w-expanded); }
+    .sidebar .brand-name{ opacity: 1; transition: opacity var(--transition); }
+   }
+
+   /* ---------------------------
+   Pequenas animações / acessibilidade
+   --------------------------- */
+   :focus{ outline: 3px solid rgba(217,126,163,0.15); outline-offset: 2px; }
+
+   /* Desktop wide */
+   @media(min-width:1100px){
+    .lista-produtos{ grid-template-columns: repeat(3. 1fr); }
+    .sidebar{ width: var(--sidebar-w); }
+   }
+
+   /*  ===== melhorias PDV: thumb, bump e filtro ===== */
+   .filter-cat select{
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(0,0,0,0.06);
+    background: transparent;
+    font-weight: 600;
+   }
+
+   /* thumbnail do produto (placeholder) */
+   .produtos .thumb{
+    width: 72px;
+    height: 72px;
+    border-radius: 10px;
+    background: linear-gradient(180deg, rgba(230,107,138,0.06), rgba(103,67,43,0.03));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: var(--accent);
+    font-size: 0.09rem;
+   }
+
+   /* efeito breve quando o produto é adicionado ao carrinho */
+   @keyframes bump {
+    0% { transform: scale(1); }
+    30% { transform: scale(1.08); }
+    60% { transform: scale(0.98); }
+    100% { transform: scale(1); }
+   }
+
+   .produtos.bump {
+    animation: bump 360ms ease;
+    box-shadow: 0 20px 40px rgba(11,11,11,0.08);
+   }
+
+   /* toasts: estilo para toasts individuais */
+   .doces-toast {
+    padding: 10px 14px;
+    border-radius: 10px;
+    color: #fff;
+    margin-top: 8px;
+    min-width: 160px;
+    box-shadow: 0 8px 24px rgbs(0,0,0,0.12);
+    font-weight: 600;
+   }
+   .doces-toast.sucess { background: rgba(59,191,154,0.95); }
+   .doces-toast.default { background: rgba(103,67,43,0.95); }
+   .doces-toast.error { background: rgba(224,100,100,0.95); }
+
+   /* mostrar índice numerado (ajuda atalhos) */
+   .produtos .index-badge {
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    background: rgba(255,255,255,0.9);
+    color: var(--accent);
+    font-weight: 700;
+    padding: 4px 6px;
+    border: 1px solid rgba(0,0,0,0.04);
+    border-radius: 8px;
+    font-size: 0.85rem;
+   }
+
+   /* pequena adaptação do grid para deixar espaço para index */
+   .produtos{ position: relative; padding-left:  44px; }
+   .produtos .bump{ margin-left:  -12px; }
+
+   #finalizar-venda {
+    font-family: var(--font) !important;
+    font-weight: 600; /* deixa mais bonito e consistente com os outros */
+}
+
+button, .btn {
+    font-family: var(--font) !important;
+}
+
+/* ===========================
+   TOP BAR (estilo profissional)
+   =========================== */
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    height: 58px;
+    width: 100%;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    font-family: var(--font);
+    gap: 12px;
+}
+
+.topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    flex: 0 0 auto;
+}
+
+.topbar-center {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1 1 auto;
+    justify-content: center;
+    min-width: 0;
+}
+
+.menu-toggle {
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: #444;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    line-height: 1;
+}
+
+.logo-text {
+    font-size: clamp(0.85rem, 2vw, 1.25rem);
+    font-weight: 600;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 240px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* SEARCH: Poppins, borda fina, leve */
+.search input {
+    font-family: var(--font);
+    font-size: 0.95rem;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(103,67,43,0.08);
+    background: rgba(255,255,255,0.98);
+    min-width: 220px;
+    max-width: 560px;
+    width: 60%;
+    transition: box-shadow 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+/* Search: foco mais leve */
+.search input:focus {
+    outline: none;
+    border-color: rgba(103,67,43,0.14);
+    box-shadow: 0px 8px 18px rgba(103,67,43,0.06);
+    transform: translateY(-2px);
+}
+
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-width: 0;
+    flex: 0 0 auto;
+}
+
+.notification-icon {
+    font-size: 1.1rem;
+    cursor: pointer;
+    color: #444;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    border-radius: 8px;
+}
+
+/* user-info: avatar + nome alinhados */
+.user-info {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 6px 8px;
+    border-radius: 10px;
+    transition: background 140ms ease, transform 140ms ease;
+    background: transparent;
+    min-width: 0;
+}
+
+.user-icon {
+    font-size: 1.6rem;
+    color: var(--accent);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.user-info:hover {
+    background: rgba(103,67,43,0.03);
+    transform: translateY(-2px);
+}
+
+.user-info .username {
+    font-weight: 600;
+    font-size: clamp(0.82rem, 1.4vw, 0.98rem);
+    color: var(--accent);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 120px;
+    display: inline-block;
+}
+
+.user-info:focus, .user-info:active {
+    outline: none;
+    box-shadow: 0 6px 18px rgba(103,67,43,0.06);
+}
+
+/* hover / foco suave que não altera layout */
+.menu-toggle:hover, .notification-icon:hover, .avatar:hover {
+    transform: translateY(-1px);
+    transition: transform 150ms ease;
+}
+
+/* ===========================
+   Mobile ajustes da topbar
+   =========================== */
+@media (max-width: 560px) {
+    .logo-text {
+        max-width: 140px;
+        font-size: 0.95rem;
+    }
+
+    .search input, .pesquisar input, .search-input {
+        min-width: 120px;
+        width: 75%;
+    }
+
+    .user-info .username {
+        max-width: 90px;
+        font-size: 0.09rem;
+    }
+
+    .user-icon {
+        font-size: 1.4rem;
+    }
+
+    .notification-icon {
+        display: none;
+    }
+
+    .topbar {
+        padding: 0 10px;
+        height: 52px;
+    }
+
+    .menu-toggle {
+        font-size: 1.25rem;
+        padding: 8px;
+    }
+}
+
+@media (max-width: 360px) {
+    .logo-text {
+        max-width: 120px;
+        font-size: 0.78rem;
+    }
+
+    .search input {
+        width: 65%;
+        min-width: 80px;
+        padding: 6px 10px;
+        font-size: 0.88rem;
+    }
+
+    .user-info .username {
+        max-width: 70px;
+        font-size: 0.852em;
+    }
+
+    .user-icon {
+        font-size: 1.25rem;
+    }
+}
+
+/* Unificar estilos de busca: aplicável tanto para .pesquisar input quanto .search input */
+.search input,
+.pesquisar input,
+.search-input {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(103,67,43,0.08);
+  background: rgba(255,255,255,0.98);
+  min-width: 180px;
+  max-width: 560px;
+  width: 60%;
+  transition: box-shadow 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.search input:focus,
+.pesquisar input:focus,
+.search-input:focus {
+  outline: none;
+  border-color: rgba(103,67,43,0.14);
+  box-shadow: 0 8px 18px rgba(103,67,43,0.06);
+  transform: translateY(-2px);
+}
+
+/* ===============================
+   SELECT da Topbar (categorias)
+   Estilo igual ao campo de busca
+   =============================== */
+
+.filter-cat select {
+  font-family: var(--font-sans); /* Poppins */
+  font-size: 0.95rem;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(103, 67, 43, 0.08); /* borda fininha igual ao input */
+  background: rgba(255, 255, 255, 0.98);
+  color: #444;
+
+  appearance: none;         /* remove seta padrão do sistema */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  cursor: pointer;
+  transition: box-shadow 160ms ease, border-color 160ms ease, transform 160ms ease;
+  padding-right: 32px;
+  min-width: 180px;
+  width: 210px;
+}
+
+/* Ícone de seta customizada */
+.filter-cat {
+  position: relative;
+}
+
+.filter-cat::after {
+  content: "\25BC"; /* seta ↓ */
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.65rem;
+  pointer-events: none;
+  color: rgba(103, 67, 43, 0.6);
+}
+
+/* Foco */
+.filter-cat select:focus {
+  outline: none;
+  border-color: rgba(103, 67, 43, 0.14);
+  box-shadow: 0 8px 18px rgba(103, 67, 43, 0.06);
+  transform: translateY(-2px);
+}
+
+/* responsivo: reduz largura para caber bem */
+@media (max-width: 560px) {
+  .filter-cat select {
+    font-size: 0.88rem;
+    padding: 6px 10px;
+    min-width: 120px;
+  }
+}
+
+/* ================================
+   Ajuste de fontes da Topbar
+   (redução leve e harmoniosa)
+   ================================ */
+
+.topbar {
+  font-size: 0.88rem; /* reduz tudo de forma proporcional */
+}
+
+/* Títulos */
+.page-title {
+  font-size: 1rem; /* antes era maior */
+}
+
+/* Ícones */
+.notification-icon,
+.user-icon,
+.menu-toggle {
+  font-size: 1.2rem; /* menor e mais elegante */
+}
+
+/* Nome de usuário */
+.username {
+  font-size: 0.9rem;
+}
+
+/* Barra de busca */
+.search input,
+.search-input {
+  font-size: 0.9rem;
+}
+
+/* Select categorias */
+.filter-cat select {
+  font-size: 0.9rem !important;  /* mantém consistente */
+}
+
+/* Topbar – busca + categoria lado a lado */
+.topbar-center {
+  display: flex;
+  align-items: center;
+  gap: 16px;              /* distância entre busca e categorias */
+  justify-content: center;
+  flex: 1;
+}
+
+/* Busca mais larga */
+.search input,
+.search-input {
+  width: 320px;           /* 🔥 largura maior */
+  max-width: 100%;
+}
+
+/* Select com largura fixa moderada */
+.filter-cat select {
+  width: 180px;           /* ajuste conforme preferir */
+  min-width: 160px;
+}
+
+/* Responsivo para telas pequenas */
+@media (max-width: 600px) {
+  .topbar-center {
+      flex-direction: column;   /* empilha verticalmente no mobile */
+      gap: 10px;
+  }
+
+  .search input {
+      width: 100%;
+  }
+
+  .filter-cat select {
+      width: 100%;
+  }
+}
+
+/* =========================
+   Fix Topbar mobile / overlap
+   Cole este bloco ao final do style.css
+   ========================= */
+
+/* base: garantir alinhamento e evitar overflow */
+.topbar {
+  box-sizing: border-box;
+  align-items: center;
+  overflow: visible;
+  padding: 8px 12px;
+  min-height: 56px;
+}
+
+/* center como grid: busca (1fr) + select (auto) — controla bem o espaço */
+.topbar-center {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  min-width: 0; /* importante para permitir encolher com text-overflow */
+}
+
+/* Busca ocupa totalmente a primeira coluna do grid */
+.search, .pesquisar {
+  min-width: 0; /* permite o input encolher sem causar overflow do container */
+}
+.search input,
+.search-input,
+.pesquisar input {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  flex-shrink: 1;
+}
+
+/* Select ao lado da busca — largura moderada */
+.filter-cat {
+  display: inline-block;
+  min-width: 140px;
+}
+.filter-cat select {
+  width: 205px; /* ajuste confortável */
+  min-width: 160px;
+  padding-right: 38px; /* espaço para seta */
+  padding-left: 14px;
+}
+
+/* Right area (notificações + usuário) */
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 0 0 auto;    /* não encolhe demais */
+  min-width: 0;
+}
+
+/* garantir que ícones e user não saiam da barra */
+.user-info, .notification-icon, .menu-toggle {
+  flex-shrink: 0;    /* NÃO encolher */
+}
+
+/* Força o username a truncar (não empurrar layout) */
+.user-info .username {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
+}
+
+/* Mobile: empilha verticalmente mas sem sobreposição */
+@media (max-width: 720px) {
+  .topbar {
+    padding: 8px 10px;
+    min-height: 64px;
+  }
+
+  .topbar-center {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .search input,
+  .search-input,
+  .pesquisar input {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .filter-cat select {
+    width: 100%;
+    min-width: 0;
+  }
+
+  /* simplifica a direita: esconde sino para evitar clutter (opcional) */
+  .notification-icon {
+    display: none;
+  }
+
+  /* garantir que user-info fique alinhado ao final e dentro da topbar */
+  .topbar-right {
+    margin-top: 4px;
+    justify-content: flex-end;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .user-info .username { max-width: 160px; } /* dá um pouco mais de espaço no mobile */
+}
+
+/* Muito pequeno (ex.: 360px) */
+@media (max-width: 380px) {
+  .filter-cat select { font-size: 0.88rem; padding: 6px 10px; }
+  .user-info .username { max-width: 110px; font-size: 0.88rem; }
+  .menu-toggle { font-size: 1.2rem; }
+  .user-icon { font-size: 1.25rem; }
+}
+
+/* segurança: se algo escapar, prevenir que elementos flutuem para fora */
+.topbar, .topbar * { max-height: none !important; }
+
+/* Ajuste final — largura ideal do select */
+.filter-cat select {
+    width: 205px;
+    min-width: 160px;
+    padding-left: 14px;
+    padding-right: 38px;
+}
