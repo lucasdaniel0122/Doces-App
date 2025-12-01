@@ -12,16 +12,13 @@ A proposta é uma interface limpa, rápida e intuitiva - foco em usabilidade e n
 
 ## 📁 Estrutura do Diretório 
 
-´´´
-frontend/
+´´´ frontend/
  ├── public/         # Arquivos acessíveis diretamente (imagens públicas, ícones, favicons)
  ├── src/
  │    ├── css/       # Estilos organizados por páginas/componentes
  │    ├── js/        # Scripts de comportamento
  │    └── images/    # Imagens internas do projeto
- └── README.md
- 
-´´´
+ └── README.md ´´´
 
 ## 🚀 Como iniciar o Frontend
 
@@ -47,3 +44,4 @@ Quando integrarmos com o backend, usaremos um servidor local.
 - Implementar JavaScript para tornar as telas interativas;
 
 - Preparar integrações futuras com o backend em Flask;
+
