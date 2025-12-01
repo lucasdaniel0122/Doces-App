@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-<strong>Bem-vindo ao Doces-App! 🚀 Aqui você encontrará um site diverso para armazenamento, controle de estoque, cadastramento de produtos e muito mais para seu empreendimento. Tudo isso de forma prática, rápido e fácil!</strong>
+<strong>Bem-vindo ao Doces-App! 🚀 Aqui você encontrará um site diverso para armazenamento, controle de estoque, cadastramento de produtos e muito mais para seu empreendimento. Tudo isso de forma prática, rápida e automatizada!</strong>
 
 ---
 
