@@ -21,7 +21,7 @@ frontend/
  │    └── images/    # Imagens internas do projeto
  └── README.md
  
-´´´´
+´´´
 
 ## 🚀 Como iniciar o Frontend
 
@@ -45,4 +45,5 @@ Quando integrarmos com o backend, usaremos um servidor local.
 - Construir a navegação principal;
 - Criar componentes comuns (botões, cards, tabelas, formulários);
 - Implementar JavaScript para tornar as telas interativas;
+
 - Preparar integrações futuras com o backend em Flask;
