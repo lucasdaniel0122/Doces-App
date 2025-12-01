@@ -15,7 +15,7 @@
 
 ## 🌐 Acesse o projeto
 
-🔗 [Clique aqui para acessar o Portfólio Online!](https://doces-app-nu.vercel.app/)
+🔗 [Clique aqui para acessar o Doces-App Online!](https://doces-app-nu.vercel.app/)
 
 ---
 
