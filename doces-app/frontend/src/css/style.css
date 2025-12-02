@@ -874,4 +874,27 @@ button, .btn {
     min-width: 160px;
     padding-left: 14px;
     padding-right: 38px;
+
 }
+
+/* ===== VENDAS view styles ===== */
+.venda-card {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+  padding:10px;
+  margin-bottom:8px;
+  border-radius:10px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(250,246,246,1));
+  border:1px solid rgba(0,0,0,0.03);
+}
+.venda-card .meta { min-width:0; overflow:hidden; }
+.venda-card .meta .title { font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.venda-card .meta .subtitle { font-size:0.85rem; color:var(--muted) }
+.venda-badge { font-weight:700; padding:6px 10px; border-radius:999px; font-size:0.86rem; }
+.venda-badge.pendente { background: #fff3e6; color:#af6a00; }
+.venda-badge.em_preparo { background:#e9f7ff; color:#0b6b99; }
+.venda-badge.pronto { background:#ecffef; color:#107f3d; }
+.venda-badge.entregue { background:#f0f6ff; color:#134a9f; }
+.venda-badge.cancelado { background:#ffeef0; color:#d03a5c; }
