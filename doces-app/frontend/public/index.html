@@ -70,6 +70,62 @@
                 </select><!-- select filtro-categoria (fim) -->
              </div><!-- div filter-cat (fim) -->
 
+
+                <div class="topbar-right">
+
+            <i class="bi bi-bell notification-icon" title="Notificações" aria-hidden="true"></i>
+
+            <div class="user-info" role="button" tabindex="0" title="Conta do Usuário" id="user-info"></div>
+                <i class="bi bi-person-circle" aria-hidden="true"></i> 
+                <span class="username">Usuário</span>
+        </div><!--div top-right (fim)-->
+    </header><!--header topbar (fim)-->
+
+    <!--Page body-->
+    <main class="content" role="main">
+        <!--Resumo + Ações rápidas-->
+        <section class="row overview">
+            <div class="card-summary">
+                <h2>Resumo</h2>
+                <ul>
+                    <li>Vendas hoje: <strong>R$ 0,00</strong></li>
+                    <li>Itens no estoque: <strong>0</strong></li>
+                    <li>Clientes cadastrados: <strong>0</strong></li>
+                </ul>
+            </div><!--div card-summary (fim)-->
+
+            <div class="card-quick-actions">
+                <h2>Ações rápidas</h2>
+                <div class="actions">
+                    <button class="btn" id="nova-venda">Nova venda</button>
+                    <button class="btn-outline" id="cadastrar-prod">Cadastrar produto</button>
+                </div><!--div actions (fim)-->
+            </div><!--div card-quick-actions-->
+        </section><!--section row overview (fim)-->
+
+        <!--Row: PDV-->
+        <section class="row-pvd-area">
+            <div class="car-pvd-left">
+                <h3>Produtos</h3>
+                <div class="lista-produtos" id="lista-produtos">
+                    <!--Produtos serão colocados via JS-->
+                    <div class="empty">Nenhum produto carregado</div><!--div empty (fim)-->
+                </div><!--div lista-produtos (fim)-->
+            </div><!--div card-pvd-left (fim)-->
+
+            <aside class="card-pvd-right">
+                <h3>Carrinho</h3>
+                <div id="cart" class="cart">
+                    <div class="cart-empty">Carrinho vazio</div><!--div cart-empty (fim)-->
+                </div><!--div cart (fim)-->
+
+                <div class="cart-footer">
+                    <div class="total">Total: <strong id="total-price">R$: 0,00</strong></div><!--div total (fim)-->
+                    <button class="btn-primary" id="finalizar-venda">Finalizar venda</button>
+                </div><!--div cart-footer (fim)-->
+            </aside><!--aside card-pvd-right (fim)-->
+        </section><!--section row-pvd-area (fim)-->
+
         <!-- VIEW: VENDAS (Cole dentro do main content onde ficam as views) -->
 <section id="view-vendas" class="view card" style="display:none; padding:14px;">
   <div class="view-header" style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
@@ -134,62 +190,6 @@
 </section>
 <!-- FIM view vendas -->
 
-
-                <div class="topbar-right">
-
-            <i class="bi bi-bell notification-icon" title="Notificações" aria-hidden="true"></i>
-
-            <div class="user-info" role="button" tabindex="0" title="Conta do Usuário" id="user-info"></div>
-                <i class="bi bi-person-circle" aria-hidden="true"></i> 
-                <span class="username">Usuário</span>
-        </div><!--div top-right (fim)-->
-    </header><!--header topbar (fim)-->
-
-    <!--Page body-->
-    <main class="content" role="main">
-        <!--Resumo + Ações rápidas-->
-        <section class="row overview">
-            <div class="card-summary">
-                <h2>Resumo</h2>
-                <ul>
-                    <li>Vendas hoje: <strong>R$ 0,00</strong></li>
-                    <li>Itens no estoque: <strong>0</strong></li>
-                    <li>Clientes cadastrados: <strong>0</strong></li>
-                </ul>
-            </div><!--div card-summary (fim)-->
-
-            <div class="card-quick-actions">
-                <h2>Ações rápidas</h2>
-                <div class="actions">
-                    <button class="btn" id="nova-venda">Nova venda</button>
-                    <button class="btn-outline" id="cadastrar-prod">Cadastrar produto</button>
-                </div><!--div actions (fim)-->
-            </div><!--div card-quick-actions-->
-        </section><!--section row overview (fim)-->
-
-        <!--Row: PDV-->
-        <section class="row-pvd-area">
-            <div class="car-pvd-left">
-                <h3>Produtos</h3>
-                <div class="lista-produtos" id="lista-produtos">
-                    <!--Produtos serão colocados via JS-->
-                    <div class="empty">Nenhum produto carregado</div><!--div empty (fim)-->
-                </div><!--div lista-produtos (fim)-->
-            </div><!--div card-pvd-left (fim)-->
-
-            <aside class="card-pvd-right">
-                <h3>Carrinho</h3>
-                <div id="cart" class="cart">
-                    <div class="cart-empty">Carrinho vazio</div><!--div cart-empty (fim)-->
-                </div><!--div cart (fim)-->
-
-                <div class="cart-footer">
-                    <div class="total">Total: <strong id="total-price">R$: 0,00</strong></div><!--div total (fim)-->
-                    <button class="btn-primary" id="finalizar-venda">Finalizar venda</button>
-                </div><!--div cart-footer (fim)-->
-            </aside><!--aside card-pvd-right (fim)-->
-        </section><!--section row-pvd-area (fim)-->
-
         <!--Row: rodapé-->
         <footer class="page-footer">
             <small>© <span id="ano"></span> DocesApp • Feito com carinho</small>
@@ -204,3 +204,4 @@
 </body>
 
 </html>
+
