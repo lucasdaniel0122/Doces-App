@@ -898,3 +898,127 @@ button, .btn {
 .venda-badge.pronto { background:#ecffef; color:#107f3d; }
 .venda-badge.entregue { background:#f0f6ff; color:#134a9f; }
 .venda-badge.cancelado { background:#ffeef0; color:#d03a5c; }
+
+/* =========================
+   MOBILE SPECIFIC: tenta manter search + select lado a lado quando couber
+   e posiciona corretamente quando espaço for insuficiente.
+   ========================= */
+@media (max-width: 720px) {
+
+  /* permite que center ocupe toda a largura e negue overflow */
+  .topbar-center {
+    /* tentamos manter em linha; se sobrando espaço, permanecem lado a lado */
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    min-width: 0;
+  }
+
+  /* regra para o SEARCH: ele cresce primeiro (flex) mas tem min-width para evitar ficar minúsculo */
+  .search.pesquisar, .dora-search {
+    flex: 1 1 60%;
+    min-width: 140px;      /* evita colapso extremo */
+    max-width: calc(100% - 120px); /* reserva espaço para select */
+  }
+  .search-input, .dora-search .search-input {
+    width: 100%;
+    padding-left: 38px;    /* se tiver ícone dentro, elemento não encosta */
+  }
+
+  /* select ao lado: largura fixa/relativa, sem invadir o texto */
+  .filter-cat {
+    flex: 0 0 120px;
+    min-width: 110px;
+    max-width: 42%;
+    box-sizing: border-box;
+  }
+  .filter-cat select { padding-left: 12px; padding-right: 40px; }
+
+  /* se o espaço for menor ainda, forçamos empilhamento apropriado (no 1º breakpoint menor) */
+  /* isto evita sobreposição exata quando tela for muito estreita */
+  @media (max-width: 420px) {
+    .topbar-center {
+      flex-direction: column;
+      gap: 8px;
+      align-items: stretch;
+    }
+    .search.pesquisar, .dora-search { flex: none; width:100%; min-width:0; max-width:100%; }
+    .filter-cat { flex: none; width:100%; min-width:0; max-width:100%; }
+    .filter-cat select { padding-left: 14px; padding-right: 36px; }
+    .user-info .username { max-width: 100px; } /* evita overflow do nome */
+  }
+}
+
+/* =========================
+   Override definitivo: se ainda houver regras conflitantes que façam o select empurrar
+   ou o ícone do usuário sair, aumente prioridade com !important (apenas aqui como última recourse)
+   ========================= */
+.filter-cat select { padding-right: 40px !important; }
+.filter-cat { min-width: 100px !important; }
+.search.pesquisar, .dora-search { min-width: 120px !important; }
+.topbar-center { min-width: 0 !important; }
+
+/* ===============================
+   DASHBOARD / HOME
+================================ */
+
+.dashboard {
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.dashboard-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #333;
+    font-family: var(--font);
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 20px;
+}
+
+.dash-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0px 2px 8px rgba(0,0,0,0.05);
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.dash-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0px 4px 14px rgba(0,0,0,0.08);
+}
+
+.dash-card h3 {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 8px;
+    font-family: var(--font);
+}
+
+.dash-card .value {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #322E2F;
+    font-family: var(--font);
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+    .dashboard {
+        padding: 10px;
+    }
+
+    .dashboard-title {
+        font-size: 1.2rem;
+    }
+}
