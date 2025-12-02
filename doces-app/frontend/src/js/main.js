@@ -479,4 +479,147 @@ function escapeHtml(str) {
     if (action === 'perfil') { alert('Abrir perfil (a implementar)'); toggleMenu(false); }
     if (action === 'sair') { alert('Logout (a implementar)'); toggleMenu(false); }
   });
+
+})();
+
+/* ===== VENDAS: gerenciar vendas (append) ===== */
+(function(){
+  const SALES_KEY = 'docesapp_sales_v1';
+
+  // selectors
+  const viewVendas = document.getElementById('view-vendas');
+  const vendasList = document.getElementById('vendas-list');
+  const vendaDetail = document.getElementById('venda-detail');
+  const vendaDetailContent = document.getElementById('venda-detail-content');
+  const vendaDetailEmpty = document.getElementById('venda-detail-empty');
+  const vendaIdEl = document.getElementById('venda-id');
+  const vendaDateEl = document.getElementById('venda-date');
+  const vendaItemsEl = document.getElementById('venda-items');
+  const vendaTotalEl = document.getElementById('venda-total');
+  const vendaStatusSelect = document.getElementById('venda-status');
+  const btnSaveStatus = document.getElementById('btn-save-status');
+  const btnDeleteVenda = document.getElementById('btn-delete-venda');
+  const btnRefreshVendas = document.getElementById('btn-refresh-vendas');
+  const filterStatus = document.getElementById('filter-status');
+
+  let SALES = []; // will hold parsed sales
+  let SELECTED_SALE_ID = null;
+
+  function loadSales() {
+    const raw = localStorage.getItem(SALES_KEY);
+    SALES = raw ? JSON.parse(raw) : [];
+    // ensure each sale has status
+    SALES = SALES.map(s => ({ status: 'pendente', ...s }));
+    renderSalesList();
+  }
+
+  function saveSales() {
+    localStorage.setItem(SALES_KEY, JSON.stringify(SALES));
+  }
+
+  function money(v){ return (v||0).toLocaleString('pt-BR', { style:'currency', currency:'BRL' }); }
+
+  function renderSalesList() {
+    if (!vendasList) return;
+    vendasList.innerHTML = '';
+    const statusFilter = filterStatus ? filterStatus.value : '';
+    const filtered = SALES.filter(s => !statusFilter || s.status === statusFilter).sort((a,b)=> b.created_at.localeCompare(a.created_at));
+    if (filtered.length === 0) { vendasList.innerHTML = '<div class="card" style="padding:12px;color:var(--muted)">Nenhuma venda encontrada</div>'; return; }
+
+    filtered.forEach(sale => {
+      const div = document.createElement('div');
+      div.className = 'venda-card';
+      div.dataset.id = sale.id;
+      const dt = new Date(sale.created_at);
+      const title = sale.items && sale.items.length ? sale.items[0].name : 'Venda';
+      const subtitle = `${dt.toLocaleDateString()} ${dt.toLocaleTimeString()} • ${sale.items.length} itens`;
+      div.innerHTML = `
+        <div class="meta">
+          <div class="title">${escapeHtml(title)}</div>
+          <div class="subtitle">${escapeHtml(subtitle)}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+          <div style="font-weight:800">${money(sale.total)}</div>
+          <div class="venda-badge ${sale.status||'pendente'}">${(sale.status||'pendente').replace('_',' ')}</div>
+        </div>
+      `;
+      div.addEventListener('click', ()=> selectSale(sale.id));
+      vendasList.appendChild(div);
+    });
+  }
+
+  function selectSale(id) {
+    SELECTED_SALE_ID = id;
+    const sale = SALES.find(s=> s.id === id);
+    if (!sale) return;
+    vendaDetailEmpty.style.display = 'none';
+    vendaDetailContent.style.display = 'block';
+    vendaIdEl.textContent = `Pedido ${sale.id}`;
+    const dt = new Date(sale.created_at);
+    vendaDateEl.textContent = dt.toLocaleString();
+    vendaStatusSelect.value = sale.status || 'pendente';
+
+    // items
+    vendaItemsEl.innerHTML = '';
+    sale.items.forEach(it => {
+      const row = document.createElement('div');
+      row.style.display = 'flex';
+      row.style.justifyContent = 'space-between';
+      row.style.marginBottom = '8px';
+      row.innerHTML = `<div style="min-width:0"><div style="font-weight:700">${escapeHtml(it.name)}</div><div style="font-size:0.85rem;color:var(--muted)">${it.qty} x ${money(it.unit_price)}</div></div><div style="font-weight:800">${money(it.subtotal)}</div>`;
+      vendaItemsEl.appendChild(row);
+    });
+
+    vendaTotalEl.textContent = money(sale.total);
+  }
+
+  // save status
+  if (btnSaveStatus) btnSaveStatus.addEventListener('click', ()=>{
+    if (!SELECTED_SALE_ID) return showToast('Selecione uma venda', 'error');
+    const sale = SALES.find(s=> s.id === SELECTED_SALE_ID);
+    if (!sale) return;
+    sale.status = vendaStatusSelect.value;
+    saveSales();
+    renderSalesList();
+    showToast('Status atualizado', 'success');
+  });
+
+  // delete sale
+  if (btnDeleteVenda) btnDeleteVenda.addEventListener('click', ()=>{
+    if (!SELECTED_SALE_ID) return showToast('Selecione uma venda', 'error');
+    if (!confirm('Deseja excluir esta venda?')) return;
+    SALES = SALES.filter(s=> s.id !== SELECTED_SALE_ID);
+    saveSales();
+    SELECTED_SALE_ID = null;
+    vendaDetailEmpty.style.display = 'block';
+    vendaDetailContent.style.display = 'none';
+    renderSalesList();
+    showToast('Venda excluída', 'default');
+  });
+
+  // refresh
+  if (btnRefreshVendas) btnRefreshVendas.addEventListener('click', ()=> loadSales());
+  if (filterStatus) filterStatus.addEventListener('change', ()=> renderSalesList());
+
+  // initialize if view exists
+  document.addEventListener('DOMContentLoaded', ()=> {
+    // if user navigates to Vendas via setActiveView, show view
+    if (typeof setActiveView === 'function') {
+      // override setActiveView to show/hide our view automatically
+      const original = setActiveView;
+      window.setActiveView = function(view){
+        original(view);
+        if (view === 'vendas') {
+          if (viewVendas) viewVendas.style.display = 'block';
+          loadSales();
+        } else {
+          if (viewVendas) viewVendas.style.display = 'none';
+        }
+      };
+    } else {
+      // fallback: show vendas view only when present if default
+      if (viewVendas) viewVendas.style.display = 'none';
+    }
+  });
+
 })();
