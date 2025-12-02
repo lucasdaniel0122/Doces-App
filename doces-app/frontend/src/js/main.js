@@ -621,5 +621,28 @@ function escapeHtml(str) {
       if (viewVendas) viewVendas.style.display = 'none';
     }
   });
-
 })();
+
+// =========================
+// DADOS INICIAIS DO DASHBOARD
+// =========================
+
+// Isso depois vamos puxar do backend (Flask + MySQL)
+
+const dashboardData = {
+    vendasHoje: 320.50,
+    pedidosPendentes: 4,
+    produtosCadastrados: produtos.length,
+    estoqueCritico: 2,
+    totalMes: 2890.75 
+};
+
+function atualizarDashboard() {
+    document.getElementById("vendas-hoje").innerText = `R$ ${dasahboardData.vendasHoje.toFixed(2)}`;
+    document.getElementById("pedidos-pendentes").innerText = dasahboardData.pedidosPendentes;
+    document.getElementById("produtos-total").innerText = dasahboardData.produtosCadastrados;
+    document.getElementById("estoque-critico").innerText = dasahboardData.estoqueCritico;
+    document.getElementById("total-mes").innerText = `R$ ${dashboardData.totalMes.toFixed(2)}`;
+}
+
+atualizarDashboard();
