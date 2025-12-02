@@ -70,6 +70,71 @@
                 </select><!-- select filtro-categoria (fim) -->
              </div><!-- div filter-cat (fim) -->
 
+        <!-- VIEW: VENDAS (Cole dentro do main content onde ficam as views) -->
+<section id="view-vendas" class="view card" style="display:none; padding:14px;">
+  <div class="view-header" style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
+    <h2 style="margin:0">Vendas / Pedidos</h2>
+    <div style="display:flex; gap:8px; align-items:center;">
+      <button id="btn-refresh-vendas" class="btn outline">Atualizar</button>
+      <select id="filter-status" style="padding:8px; border-radius:8px;">
+        <option value="">Todos status</option>
+        <option value="pendente">Pendente</option>
+        <option value="em_preparo">Em preparo</option>
+        <option value="pronto">Pronto</option>
+        <option value="entregue">Entregue</option>
+        <option value="cancelado">Cancelado</option>
+      </select>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:12px; margin-top:12px;">
+    <!-- Lista de vendas -->
+    <div id="vendas-list" style="flex:1 1 420px; max-height:64vh; overflow:auto;"></div>
+
+    <!-- Painel de detalhes -->
+    <div id="venda-detail" style="flex:0 0 360px; min-width:260px;">
+      <div class="card" style="padding:12px;">
+        <div id="venda-detail-empty" style="color:var(--muted)">Selecione uma venda para ver os detalhes</div>
+        <div id="venda-detail-content" style="display:none;">
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+            <div>
+              <div id="venda-id" style="font-weight:700"></div>
+              <div id="venda-date" style="font-size:0.9rem; color:var(--muted)"></div>
+            </div>
+            <div>
+              <select id="venda-status" style="padding:6px 8px; border-radius:8px;">
+                <option value="pendente">Pendente</option>
+                <option value="em_preparo">Em preparo</option>
+                <option value="pronto">Pronto</option>
+                <option value="entregue">Entregue</option>
+                <option value="cancelado">Cancelado</option>
+              </select>
+            </div>
+          </div>
+
+          <hr style="margin:10px 0"/>
+
+          <div id="venda-items" style="max-height:38vh; overflow:auto;"></div>
+
+          <hr style="margin:10px 0"/>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div style="font-weight:700">Total</div>
+            <div id="venda-total" style="font-weight:800"></div>
+          </div>
+
+          <div style="display:flex; gap:8px; margin-top:12px;">
+            <button id="btn-print-venda" class="btn outline">Imprimir</button>
+            <button id="btn-save-status" class="btn">Salvar</button>
+            <button id="btn-delete-venda" class="btn outline" style="margin-left:auto; color:var(--danger); border-color: rgba(224,100,100,0.2)">Excluir</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- FIM view vendas -->
+
+
                 <div class="topbar-right">
 
             <i class="bi bi-bell notification-icon" title="Notificações" aria-hidden="true"></i>
@@ -137,4 +202,5 @@
 <!--Link JS-->
 <script src="../src/js/main.js" defer></script>
 </body>
+
 </html>
