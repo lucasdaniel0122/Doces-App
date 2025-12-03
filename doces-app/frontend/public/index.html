@@ -70,6 +70,38 @@
             <p class="value" id="total-mes">R$ 0,00</p>
         </div><!-- div dash-card5 (fim) -->
     </div><!-- div dashboard-grid (fim) -->
+
+<!-- ===== DASHBOARD - GRÁFICOS ===== -->
+<div class="dashboard-charts" style="margin-top:18px;">
+  <div class="charts-controls">
+    <label for="dashboard-range">Período:</label>
+    <select id="dashboard-range">
+      <option value="7">Últimos 7 dias</option>
+      <option value="30" selected>Últimos 30 dias</option>
+      <option value="90">Últimos 90 dias</option>
+    </select>
+    <button id="dashboard-refresh" class="btn outline">Atualizar</button>
+  </div>
+
+  <div class="charts-grid">
+    <div class="chart-card">
+      <h4>Vendas por dia</h4>
+      <canvas id="chart-sales" aria-label="Gráfico de vendas por dia" role="img"></canvas>
+    </div>
+
+    <div class="chart-card">
+      <h4>Produtos mais vendidos</h4>
+      <canvas id="chart-top-products" aria-label="Gráfico de produtos mais vendidos" role="img"></canvas>
+    </div>
+
+    <div class="chart-card">
+      <h4>Participação por categoria</h4>
+      <canvas id="chart-category-share" aria-label="Gráfico de participação por categoria" role="img"></canvas>
+    </div>
+  </div>
+</div>
+<!-- ===== FIM DASHBOARD - GRÁFICOS ===== -->
+        
 </section><!-- section dashboard (fim) -->
 <div class="main">
 
@@ -236,5 +268,6 @@
 </body>
 
 </html>
+
 
 
