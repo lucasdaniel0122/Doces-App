@@ -1022,3 +1022,72 @@ button, .btn {
         font-size: 1.2rem;
     }
 }
+
+/* Dashboard - Charts */
+
+.dashboard-charts {
+    padding: 6px 0 18px;
+}
+
+.charts-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+.charts-controls label {
+    font-weight: 600;
+    color: var(--muted);
+    font-family: var(--font);
+}
+
+#dashboard-range {
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(0,0,0,0.06);
+}
+
+.charts-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 16px;
+    align-items: start;
+}
+
+/* chart card individual */
+
+.chart-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 6px 18px rgba(11,11,11,0.04);
+}
+
+.chart-card h4 {
+    margin: 0 0 8px 0;
+    font-size: 1rem;
+    color: #333;
+    font-weight: 600;
+    font-family: var(--font);
+}
+
+/* canvas responsive */
+
+.chart-card canvas {
+    width: 100% !important;
+    height: 240px !important;
+}
+
+/* mobile */
+
+@media (max-width: 880px) {
+    .charts-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .chart-card canvas {
+        height: 220px !important;
+    }
+}
