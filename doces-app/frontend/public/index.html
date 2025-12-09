@@ -73,15 +73,26 @@
 
 <!-- ===== DASHBOARD - GRÁFICOS ===== -->
 <div class="dashboard-charts" style="margin-top:18px;">
-  <div class="charts-controls">
+  <div class="charts-controls" style="display: flex; align-items: center; flex-wrap: wrap; gap: 12px;">
     <label for="dashboard-range">Período:</label>
+      <div class="filter-cat">
     <select id="dashboard-range">
       <option value="7">Últimos 7 dias</option>
       <option value="30" selected>Últimos 30 dias</option>
       <option value="90">Últimos 90 dias</option>
     </select>
+      </div>
     <button id="dashboard-refresh" class="btn outline">Atualizar</button>
   </div>
+
+    <!-- Botões Export -->
+    <div class="export-buttons" aria-hidden="false">
+        <div style="margin-left: 8px; display: flex; align-items: center;">
+            <button id="export-sales-day" class="btn outline"> PNG (Vendas)</button>
+            <button id="export-sales-top" class="btn outline"> PNG (Top)</button>
+            <button id="export-sales-categories" class="btn outline"> PNG (Categorias)</button>
+        </div>
+    </div>
 
   <div class="charts-grid">
     <div class="chart-card">
@@ -268,6 +279,7 @@
 </body>
 
 </html>
+
 
 
 
