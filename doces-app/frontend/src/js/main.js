@@ -792,3 +792,104 @@ atualizarDashboard();
 
     window.DashboardCharts = { updateCharts };
 })();
+
+
+/* Melhorias: paleta de cores, ferramentas personalizadas e exportação PNG */
+
+(function(){
+  //helper para pegar cor CSS definida no :root
+  function cssVar(name, fallback){
+    const val = getComputedStyle(document.documentElement).getPropertyValue(name);
+    return (val && val.trim()) ? val.trim() : (fallback || '#666');
+  }
+
+  // Paleta de cores do CSS root
+  const color1 = cssVar('--brand-1', '#6b3a3a');
+  const color2 = cssVar('--brand-2', '#e87f98');
+  const accent1 = cssVar('--accent-1', '#67a3c9');
+  const accent2 = cssVar('--accent-2', '#f3cfa8');
+
+  // Formatação de ferramentas
+  function currencyTooltip(value){
+    if (typeof value === 'number') return value.toLocaleString('pt-BR', { style: 'currency', currency:'BRL'});
+    return value;
+  }
+
+  // Aploicando customização das ferramentas
+  try {
+    if (salesChart) {
+      salesChart.options.plugins.tooltip = {
+        callbacks: {
+          title: (items) => { // matriz de itens
+            if (!items || !items.length) return '';
+          const d = new Date(items[0].label);
+        return d.toLocaleDateString();
+       },
+       label: (item) => {
+        return 'Vendas: ' + currencyTooltip(item.raw || item.y || item.formattedValue);
+       }
+        }
+      };
+      // aplicando paleta de cores
+      salesChart.data.datasets[0].borderColor = color1;
+      salesChart.data.datasets[0].backgroundColor = color1 + '33'; // alpha
+      salesChart.update();
+    }
+
+    if (topChart) {
+      topChart.options.plugins.tooltip = {
+        callbacks: {
+          label: (item) => {
+            return `Vendido: ${itemm.raw} un.`;
+          }
+        }
+      };
+      topChart.data.datasets[0].backgroundColor [color1, color2, accent1, accent2, '#b1b1b1', '#e0cfc3', '#cfdfe6', '#f4e3da'];
+      topChart.update();
+    }
+
+    if(catChart) {
+      catChart.options.plugins.tooltip = {
+        callbacks: {
+          label: (item) => {
+            const pct = (item.raw / catChart.data.datasets[0].data.reduce((a,b)=>a+b,0) * 100).toFixed(1);
+            return `${item.label}: ${item.raw} (${pct}%)`;
+          }
+        }
+      };
+      catChart.data.datasets[0].backgroundColor = [accent1, color2, accent2, color1, '#efe5f2', '#f7efe8'];
+      catChart.update();
+    }
+  } catch(e){
+    console.warn('Erro aplicando customização do charts', e);
+  }
+
+  // Exportação helper: download PNG charts
+  function exportChartPNG(chart, filename){
+    if (!chart) { alert('Gráfico não encontrado!'); return; }
+    try {
+      const link = document.createElement('a');
+      link.href = chart.toBase64Image(); // Método Charts.js
+      link.download = filename || `chart-${Date.now()}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch(err){
+      console.error('Erro de Exportação', err);
+      alert('Não foi possível exportar a imagem');
+    }
+  }
+
+  // Exportação Botões
+  document.getElementById('export-sales')?.addEventListener('click', ()=> exportChartPNG(salesChart, 'vendas_por_dia.png'));
+  document.getElementById('export-top')?.addEventListener('click', ()=> exportChartPNG(topChart, 'top_produtos.png'));
+  document.getElementById('export-cat')?.addEventListener('click', ()=> exportChartPNG(catChart, 'participacao_categorias.png'));
+
+  // Opcional: exportação de todos os charts via zip / download sequencial
+  document.getElementById('export-all')?.addEventListener('click', ()=>{
+    exportChartPNG(salesChart, 'vendas_por_dia.png');
+    setTimeout(()=> exportChartPNG(topChart, 'top_produtos.png'), 600);
+    setTimeout(()=> exportChartPNG(catChart, 'participacao_categorias.png'), 1200);
+  });
+  
+})();
