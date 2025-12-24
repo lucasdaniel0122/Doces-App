@@ -893,3 +893,45 @@ atualizarDashboard();
   });
   
 })();
+
+// DASHBOARD MOCK
+
+const salesByDayChart = new Chart(
+  document.getElementById('salesByDay'),
+  {
+    type: 'line',
+    data: {
+      labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom'],
+      datasets: [{
+        label: 'Vendas (R$)',
+        data: [120, 200, 150, 300, 280, 420, 380],
+        borderColor: '#6b3a3a',
+        backgroundColor: 'rgba(107, 58, 58, 0.15)',
+        tension: 0.35,
+        fill: true
+    }]
+  },
+  options: {
+    plugins: { legend: { display: false } },
+    responsive: true
+  }
+}
+);
+
+const salesByCategoryChart = new Chart(
+  document.getElementById('salesByCategory'),
+  {
+    type: 'bar',
+    data: {
+      labels: ['Brigadeiros', 'Ovos', 'Bolos', 'Trufas'],
+      datasets: [{
+        data: [520, 380, 290, 210],
+        backgroundColor: '#e87f98'
+      }]
+    },
+    options: {
+      plugins: { legend: { display: false } },
+      responsive: true
+    }
+  }
+);
