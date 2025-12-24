@@ -158,6 +158,66 @@
 
     <!--Page body-->
     <main class="content" role="main">
+
+        <!-- DASHBOARD -->
+       <section class="dashboard">
+
+        <!-- MÉTRICAS -->
+         <div class="dashboard-cards">
+          <div class="card-metric">
+            <span class="metric-label">Faturamento Hoje</span>
+            <strong class="metric-value">R$ 0,00</strong>
+          </div>
+
+          <div class="card-metric">
+            <span class="metric-label">Pedidos Hoje</span>
+            <strong class="metric-value">0</strong>
+          </div>
+
+          <div class="card-metric">
+            <span class="metric-label">Produtos Vendidos</span>
+            <strong class="metric-value">0</strong>
+          </div>
+
+          <div class="crad-metric">
+            <span class="metric-label">Ticket Médio</span>
+            <strong class="metric-value">R$ 0,00</strong>
+          </div>
+         </div>
+
+         <!-- FILTROS -->
+          <div class="dashboard-filters">
+            <div class="select-dora-wrap">
+              <select class="select-dora" id="dashboard-period">
+                <option value="7">Últimos 7 dias</option>
+                <option value="30">Últimos 30 dias</option>
+                <option value="90">Últimos 90 dias</option>
+              </select>
+            </div>
+
+            <div class="select-dora-wrap">
+              <select class="select-dora" id="dashboard-category">
+                <option value="all">Todas as Categorias</option>
+                <option value="brigadeiros">Brigadeiros</option>
+                <option value="ovos">Ovos de Páscoa</option>
+                <option value="bolos">Bolos de Pote</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- GRÁFICOS -->
+           <div class="dashboard-charts">
+            <div class="card-chart-card">
+              <h3>Vendas por Dia</h3>
+              <canvas id="salesByDay"></canvas>
+            </div>
+
+            <div class="card-chart-card">
+              <h3>Vendas por Categorias</h3>
+              <canvas id="salesByCategory"></canvas>
+            </div>
+           </div>
+       </section>
         <!--Resumo + Ações rápidas-->
         <section class="row overview">
             <div class="card-summary">
@@ -279,6 +339,7 @@
 </body>
 
 </html>
+
 
 
 
