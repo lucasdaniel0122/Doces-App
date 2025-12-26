@@ -922,20 +922,42 @@ if (canvasSalesByDay && typeof Chart !== 'undefined') {
   });
 }
 
-const salesByCategory = new Chart(
-  document.getElementById('salesByCategory'),
-  {
+
+
+// Gráfico Vendas Por Categoria
+
+const canvasSalesByCategory = document.getElementById('chart-vendas-categoria');
+
+let catchart = null;
+
+if (canvasSalesByCategory) {
+  catchart = new Chart(canvasSalesByCategory, {
     type: 'bar',
     data: {
-      labels: ['Brigadeiros', 'Ovos', 'Bolos', 'Trufas'],
+      labels: [
+        'Brigadeiros',
+        'Ovos de Páscoa',
+        'Bolos no Pote',
+        'Trufas',
+        'Pão de Mel'
+      ],
       datasets: [{
-        data: [520, 380, 290, 210],
-        backgroundColor: '#e87f98'
+        data: [520, 380, 290, 210, 160],
+        backgroundColor: [
+          '#6b3a3a',
+          '#e87f98',
+          '#f2b705',
+          '#a45ee5',
+          '#f28c28'
+        ],
+        borderRadius: 8
       }]
     },
     options: {
-      plugins: { legend: { display: false } },
-      responsive: true
+      responsive: true,
+      plugins: {
+        legend: { display: false }
+      }
     }
-  }
-);
+  });
+}
