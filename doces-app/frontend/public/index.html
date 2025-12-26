@@ -97,7 +97,7 @@
   <div class="charts-grid">
     <div class="chart-card">
       <h4>Vendas por dia</h4>
-      <canvas id="chart-sales" aria-label="Gráfico de vendas por dia" role="img"></canvas>
+      <canvas id="chart-vendas-dia" aria-label="Gráfico de vendas por dia" role="img"></canvas>
     </div>
 
     <div class="chart-card">
@@ -107,7 +107,7 @@
 
     <div class="chart-card">
       <h4>Participação por categoria</h4>
-      <canvas id="chart-category-share" aria-label="Gráfico de participação por categoria" role="img"></canvas>
+      <canvas id="chart-vendas-categoria" aria-label="Gráfico de participação por categoria" role="img"></canvas>
     </div>
   </div>
 </div>
@@ -333,14 +333,11 @@
 </div><!--div main (fim)-->
 
 <div id="toast-container" aria-live="polite" aria-atomic="true" style="position:fixed; right:18px; bottom:18px; z-index:9999;"></div>
-
+    
+<!-- Chart.js (CDN) - coloque no <head> -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <!--Link JS-->
 <script src="../src/js/main.js" defer></script>
 </body>
 
 </html>
-
-
-
-
-
