@@ -1,4 +1,9 @@
+
+console.log('Chart disponível?', typeof Chart);
+
 console.log('main.js carregado!');
+
+let salesChart = null;
 
 /* ======= Configurações / constantes ======= */
 const SIDEBAR_COLLAPSED_W = '72px';
@@ -722,6 +727,12 @@ atualizarDashboard();
 
         // Sales line
 
+        const canvasVandasDia = document.getElementById('chart-vendas-dia');
+
+        if (canvasVnedasDia) {
+            const ctxChart = canvasVendasDia.getContext('2d');
+        }
+
         salesChart = new Chart(ctxSales.getContext('2d'), {
             type: 'line',
             data: {
@@ -836,30 +847,6 @@ atualizarDashboard();
       salesChart.update();
     }
 
-    if (topChart) {
-      topChart.options.plugins.tooltip = {
-        callbacks: {
-          label: (item) => {
-            return `Vendido: ${itemm.raw} un.`;
-          }
-        }
-      };
-      topChart.data.datasets[0].backgroundColor [color1, color2, accent1, accent2, '#b1b1b1', '#e0cfc3', '#cfdfe6', '#f4e3da'];
-      topChart.update();
-    }
-
-    if(catChart) {
-      catChart.options.plugins.tooltip = {
-        callbacks: {
-          label: (item) => {
-            const pct = (item.raw / catChart.data.datasets[0].data.reduce((a,b)=>a+b,0) * 100).toFixed(1);
-            return `${item.label}: ${item.raw} (${pct}%)`;
-          }
-        }
-      };
-      catChart.data.datasets[0].backgroundColor = [accent1, color2, accent2, color1, '#efe5f2', '#f7efe8'];
-      catChart.update();
-    }
   } catch(e){
     console.warn('Erro aplicando customização do charts', e);
   }
@@ -896,27 +883,28 @@ atualizarDashboard();
 
 // DASHBOARD MOCK
 
-const salesByDayChart = new Chart(
-  document.getElementById('salesByDay'),
-  {
-    type: 'line',
-    data: {
-      labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom'],
-      datasets: [{
-        label: 'Vendas (R$)',
-        data: [120, 200, 150, 300, 280, 420, 380],
-        borderColor: '#6b3a3a',
-        backgroundColor: 'rgba(107, 58, 58, 0.15)',
-        tension: 0.35,
-        fill: true
-    }]
-  },
-  options: {
-    plugins: { legend: { display: false } },
-    responsive: true
-  }
+const canvasSalesByDay = document.getElementById('chart-vendas-dia');
+
+if (canvasSalesByDay && typeof Chart !== 'undefined') {
+    new Chart(canvasSalesByDay, {
+        type: 'line',
+        data: {
+            labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom'],
+            datasets: [{
+                label: 'Vendas (R$)',
+                data: [120, 200, 150, 300, 280, 420, 380],
+                borderColor: '#6b3a3a',
+                backgroundColor: 'rgba(107, 58, 58, 0.15)',
+                tension: 0.35,
+                fill: true
+            }]
+        },
+        options: {
+            plugins: { legend: { display: false } },
+            responsive: true
+       }
+    });
 }
-);
 
 const salesByCategoryChart = new Chart(
   document.getElementById('salesByCategory'),
