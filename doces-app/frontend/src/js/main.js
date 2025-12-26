@@ -1,9 +1,17 @@
-
 console.log('Chart disponível?', typeof Chart);
 
 console.log('main.js carregado!');
 
 let salesChart = null;
+
+/* ======= DASHBOARD | DADOS MOCK (INDEPENDENTE DO PDV) ======= */
+const DASHBOARD_DATA = {
+  faturamentoHoje: 1240,
+  pedidosHoje: 18,
+  produtosVendidos: 67,
+  ticketMedio: 68.9
+};
+
 
 /* ======= Configurações / constantes ======= */
 const SIDEBAR_COLLAPSED_W = '72px';
@@ -484,7 +492,6 @@ function escapeHtml(str) {
     if (action === 'perfil') { alert('Abrir perfil (a implementar)'); toggleMenu(false); }
     if (action === 'sair') { alert('Logout (a implementar)'); toggleMenu(false); }
   });
-
 })();
 
 /* ===== VENDAS: gerenciar vendas (append) ===== */
@@ -626,6 +633,7 @@ function escapeHtml(str) {
       if (viewVendas) viewVendas.style.display = 'none';
     }
   });
+
 })();
 
 // =========================
@@ -634,23 +642,32 @@ function escapeHtml(str) {
 
 // Isso depois vamos puxar do backend (Flask + MySQL)
 
-const dashboardData = {
-    vendasHoje: 320.50,
-    pedidosPendentes: 4,
-    produtosCadastrados: produtos.length,
-    estoqueCritico: 2,
-    totalMes: 2890.75 
-};
-
 function atualizarDashboard() {
-    document.getElementById("vendas-hoje").innerText = `R$ ${dasahboardData.vendasHoje.toFixed(2)}`;
-    document.getElementById("pedidos-pendentes").innerText = dasahboardData.pedidosPendentes;
-    document.getElementById("produtos-total").innerText = dasahboardData.produtosCadastrados;
-    document.getElementById("estoque-critico").innerText = dasahboardData.estoqueCritico;
-    document.getElementById("total-mes").innerText = `R$ ${dashboardData.totalMes.toFixed(2)}`;
+  const vendasHojeEl = document.getElementById("vendas-hoje");
+  if (vendasHojeEl && typeof DASHBOARD_DATA.vendasHoje === "number") {
+    vendasHojeEl.innerText = `R$ ${DASHBOARD_DATA.vendasHoje.toFixed(2)}`;
+  }
+
+  const pedidosPendentesEl = document.getElementById("pedidos-pendentes");
+  if (pedidosPendentesEl) {
+    pedidosPendentesEl.innerText = DASHBOARD_DATA.pedidosPendentes ?? 0;
+  }
+
+  const produtosTotalEl = document.getElementById("produtos-total");
+  if (produtosTotalEl) {
+    produtosTotalEl.innerText = DASHBOARD_DATA.produtosCadastrados ?? 0;
+  }
+
+  const estoqueCriticoEl = document.getElementById("estoque-critico");
+  if (estoqueCriticoEl) {
+    estoqueCriticoEl.innerText = DASHBOARD_DATA.estoqueCritico ?? 0;
+  }
+
+  const totalMesEl = document.getElementById("total-mes");
+  if (totalMesEl && typeof DASHBOARD_DATA.totalMes === "number") {
+    totalMesEl.innerText = `R$ ${DASHBOARD_DATA.totalMes.toFixed(2)}`;
+  }
 }
-
-
 
 atualizarDashboard();
 
@@ -727,13 +744,13 @@ atualizarDashboard();
 
         // Sales line
 
-        const canvasVandasDia = document.getElementById('chart-vendas-dia');
+        const canvasVendasDia = document.getElementById('chart-vendas-dia');
 
         if (canvasVendasDia) {
-            const ctxChart = canvasVendasDia.getContext('2d');
+          const ctxChart = canvasVendasDia.getContext('2d');
         }
 
-        salesChart = new Chart(ctxSales.getContext('2d'), {
+      salesChart = new Chart (ctxChart.getContext('2d'), {
             type: 'line',
             data: {
                 labels: salesData.labels,
@@ -804,7 +821,6 @@ atualizarDashboard();
     window.DashboardCharts = { updateCharts };
 })();
 
-
 /* Melhorias: paleta de cores, ferramentas personalizadas e exportação PNG */
 
 (function(){
@@ -826,7 +842,7 @@ atualizarDashboard();
     return value;
   }
 
-  // Aploicando customização das ferramentas
+  // Aplicando customização das ferramentas
   try {
     if (salesChart) {
       salesChart.options.plugins.tooltip = {
@@ -886,27 +902,27 @@ atualizarDashboard();
 const canvasSalesByDay = document.getElementById('chart-vendas-dia');
 
 if (canvasSalesByDay && typeof Chart !== 'undefined') {
-    new Chart(canvasSalesByDay, {
-        type: 'line',
-        data: {
-            labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom'],
-            datasets: [{
-                label: 'Vendas (R$)',
-                data: [120, 200, 150, 300, 280, 420, 380],
-                borderColor: '#6b3a3a',
-                backgroundColor: 'rgba(107, 58, 58, 0.15)',
-                tension: 0.35,
-                fill: true
-            }]
-        },
-        options: {
-            plugins: { legend: { display: false } },
-            responsive: true
-       }
-    });
+  new Chart(canvasSalesByDay, {
+    type: 'line',
+    data: {
+      labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom'],
+      datasets: [{
+        label: 'Vendas (R$)',
+        data: [120, 200, 150, 300, 280, 420, 380],
+        borderColor: '#6b3a3a',
+        backgroundColor: 'rgba(107, 58, 58, 0.15)',
+        tension: 0.35,
+        fill: true
+      }]
+    },
+    options: {
+      plugins: { legend: { display: false } },
+      responsive: true
+    }
+  });
 }
 
-const salesByCategoryChart = new Chart(
+const salesByCategory = new Chart(
   document.getElementById('salesByCategory'),
   {
     type: 'bar',
@@ -923,4 +939,3 @@ const salesByCategoryChart = new Chart(
     }
   }
 );
-
