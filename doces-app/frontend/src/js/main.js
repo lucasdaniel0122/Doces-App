@@ -729,7 +729,7 @@ atualizarDashboard();
 
         const canvasVandasDia = document.getElementById('chart-vendas-dia');
 
-        if (canvasVnedasDia) {
+        if (canvasVendasDia) {
             const ctxChart = canvasVendasDia.getContext('2d');
         }
 
@@ -923,3 +923,4 @@ const salesByCategoryChart = new Chart(
     }
   }
 );
+
