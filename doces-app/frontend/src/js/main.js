@@ -37,6 +37,68 @@ const debounce = (fn, wait = 250) => {
 
 const nowISO = () => new Date().toISOString();
 
+// Vendas - Fonte única de Dados
+
+function obterVendas() {
+  const vendasSalvas = localStorage.getItem('vendas');
+
+  if (vendasSalvas) {
+    try {
+      const parsed = JSON.parse(vendasSalvas);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed;
+      }
+    } catch (e) {
+      console.warn('Erro ao ler vendas salvas, usando exemplo');
+    }
+  }
+
+  // Dados Exemplo (fallback)
+
+  return [
+    { data: '2025-03-01', valor: 120, categoria: 'Brigadeiros' },
+    { data: '2025-03-02', valor: 200, categoria: 'Ovos de Páscoa' },
+    { data: '2025-03-03', valor: 150, categoria: 'Bolos no Pote' }
+  ];
+}
+
+function calcularVendasPorDia() {
+  const vendas = obterVendas();
+  const mapa = {};
+
+  vendas.forEach(v => {
+    mapa[v.data] = (mapa[v.data] || 0) + v.valor;
+  });
+
+  return {
+    labels: Object.keys(mapa),
+    values: Object.values(mapa)
+  };
+}
+
+// Gráfico para dados reais
+
+  function filtrarVendas() {
+    const vendas = obtervendas();
+    const hoje = new Date();
+    let dias = 7;
+
+    if (dashboardFilters.periodo === 'hoje') dias = 1;
+    if (dashboardFilters.periodo === '30dias') dias = 30;
+
+    const dataLimite = new Date();
+    dataLimite.setDate(hoje.getDate() - dias);
+
+    return vendas.filter(v => {
+      const dataVenda = new Date(v.data);
+
+      const dentroPeriodo = dataVenda >= dataLimite;
+      const mesmaCategoria = dashboardFilters.categoria === 'todas' || v.categoria === dashboardFilters.categoria;
+
+      return dentroPeriodo && mesmaCategoria;
+    });
+  }
+
 /* ======= Mock inicial de produtos (será salvo no localStorage se vazio) ======= */
 const defaultProdutos = [
     /*Brigadeiros*/
@@ -721,6 +783,31 @@ atualizarDashboard();
   
 })();
 
+//Adicionar venda do usuário
+
+const btnAddVenda = document.getElementById('btn-add-venda');
+
+if (btnAddVenda) {
+  btnAddVenda.addEventListener('click', () => {
+    const data = document.getElementById('venda-data').value;
+    const valor = parseFloat(document.getElementById('venda-valor').value);
+    const categoria = document.getElementById('venda-categoria').value;
+
+    if (!data || isNaN(valor)) {
+      alert('Preencha data e valor corretamente');
+      return;
+    }
+
+    const vendas = obterVendas();
+    vendas.push({ data, valor, categoria });
+
+    localStorage.setItem('vendas', JSON.stringify(vendas));
+
+    atualizarGraficoVendas();
+    atualizarDashboard();
+  });
+}
+
 // DASHBOARD MOCK
 
 let salesChart = null;
@@ -803,4 +890,15 @@ if(catChart) {
   catChart.update();
 }
 
+function atualizarGraficoVendas() {
+  if (!salesChart) return;
+
+  const dados = calcularVendasPorDia();
+
+  salesChart.data.labels = dados.labels;
+  salesChart.data.datasets[0].data = dados.value;
+  salesChart.update();
+}
+
+atualizarGraficoVendas();
 
