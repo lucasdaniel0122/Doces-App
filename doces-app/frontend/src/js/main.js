@@ -670,53 +670,6 @@ function atualizarDashboard() {
 
 atualizarDashboard();
 
-        // Sales line
-
-        const canvasVendasDia = document.getElementById('chart-vendas-dia');
-
-        if (canvasVendasDia) {
-          const ctxChart = canvasVendasDia.getContext('2d');
-        }
-
-      salesChart = new Chart (ctxChart.getContext('2d'), {
-            type: 'line',
-            data: {
-                labels: salesData.labels,
-                datasets: [{
-                    label: 'Vendas (R$)',
-                    data: salesData.values,
-                    borderColor: 'rgba(103,67,43,0.09)',
-                    backgroundColor: 'rgba(103,67,43,0.12)',
-                    tension: 0.25,
-                    pointRadius: 2,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive:true,
-                maintainAspectRatio:false,
-                plugins:{ legend:{display:false }, tooltip:{ mode:'index', intersect:false } },
-                scales:{
-                    x:{ grid:{ display:false }, ticks:{ maxRotation:0, autoSkip:true } },
-                    y:{ beginAtZero:true, ticks:{ callback: v => 'R$' + v } }
-                }
-            }
-        });
-
-        // Top Products bar
-
-        topChart = new Chart(ctxTop.getContext('2d'), {
-            type: 'bar',
-            data: {
-                labels: catData.labels,
-                dataSets: [{
-                    data: catData.values,
-                    backgroundColor: ['#F6D6D6', '#E6F2FA', '#FFF0E5', '#F2E6FF', '#E9F7EE', '#FFF5F0']
-                }]
-            },
-            options: { responsive:true, maintainAspectRatio:false, plugins:{ legend:{ position:'bottom' } } }
-        });
-
 /* Melhorias: paleta de cores, ferramentas personalizadas e exportação PNG */
 
 (function(){
@@ -736,31 +689,6 @@ atualizarDashboard();
   function currencyTooltip(value){
     if (typeof value === 'number') return value.toLocaleString('pt-BR', { style: 'currency', currency:'BRL'});
     return value;
-  }
-
-  // Aplicando customização das ferramentas
-  try {
-    if (salesChart) {
-      salesChart.options.plugins.tooltip = {
-        callbacks: {
-          title: (items) => { // matriz de itens
-            if (!items || !items.length) return '';
-          const d = new Date(items[0].label);
-        return d.toLocaleDateString();
-       },
-       label: (item) => {
-        return 'Vendas: ' + currencyTooltip(item.raw || item.y || item.formattedValue);
-       }
-        }
-      };
-      // aplicando paleta de cores
-      salesChart.data.datasets[0].borderColor = color1;
-      salesChart.data.datasets[0].backgroundColor = color1 + '33'; // alpha
-      salesChart.update();
-    }
-
-  } catch(e){
-    console.warn('Erro aplicando customização do charts', e);
   }
 
   // Exportação helper: download PNG charts
@@ -874,4 +802,5 @@ if(catChart) {
 
   catChart.update();
 }
+
 
