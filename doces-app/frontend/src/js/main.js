@@ -1,8 +1,7 @@
+
 console.log('Chart disponível?', typeof Chart);
 
 console.log('main.js carregado!');
-
-let salesChart = null;
 
 /* ======= DASHBOARD | DADOS MOCK (INDEPENDENTE DO PDV) ======= */
 const DASHBOARD_DATA = {
@@ -671,77 +670,6 @@ function atualizarDashboard() {
 
 atualizarDashboard();
 
-/* Dashboard - Charts */
-
-(function(){
-    if (typeof Chart === 'undefined') {
-        console.warn('Chart.js não encontrado. Verifique se o <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> foi adicionado ao <head>.');
-        return;
-    }
-
-    // helpers
-
-    function fmtCurrency(v){ return v.toLocaleString('pt-BR', { style:'currency', currency:'BRL' }); }
-    function daysAgoArray(days){
-        const arr=[];
-        for(let i=days-1;i>=0;i--){
-            const d=new Date();
-            d.setDate(d.getDate()-i);
-            arr.push(d.toISOString().slice(0,10)); // YYYY-MM-DD
-        }
-        return arr;
-    }
-
-    // Exemplo de geração de dados
-
-    function gerarDadosVendasPorDia(days){
-        const labels = daysAgoArray(days);
-        const values = labels.map((l,i) => {
-            // simula variação e picos nos finais de semana
-            
-            const base = 150 + Math.round(100*Math.sin(i/3) + 80*Math.random());
-            return base + Math.round(200*Math.random());
-        });
-        return { labels, values };
-    }
-
-    // exemplo top produtos */
-
-    function gerarTopProdutosMock(){
-        //se existir array global produtos, use seus nomes
-
-        const prodList = (window.produtos && Array.isArray(window.produtos) && window.produtos.length>0)
-        ? window.produtos.slice(0,8).map(p=>p.name)
-        : ['Brigadeiro', 'Oovo Colher', 'Copo Supremo', 'Chocotone Recheado', 'Cone Trufado', 'Bolo no Pote', 'Trufa', 'Biscoito Decorado'];
-        const values = prodList.map(()=> Math.floor(20 + Math.random()*120));
-        return { labels: prodList, values };
-    }
-
-    // exemplo categorias
-
-    function gerarCategoriasMock(){
-        return {
-            labels: ['Brigadeiro', 'Ovos', 'Cones', 'Chocotones', 'Cestas', 'Outros'],
-            values: [35,20,15,12,10,8]
-        };
-    }
-
-    // canvas elements
-
-    const ctxSales = document.getElementById('chart-sales');
-    const ctxTop = document.getElementById('chart-top-products');
-    const ctxCat = document.getElementById('chart-category-share');
-    if (!ctxSales || !ctxTop || !ctxChart) return;
-
-    // default datasets
-
-    let salesChart, topChart, catChart;
-
-    function createCharts(initialDays=30){
-        const salesData = gerarDadosVendasPorDia(initialDays);
-        const topData = gerarTopProdutosMock();
-        const catData = gerarCategoriasMock();
-
         // Sales line
 
         const canvasVendasDia = document.getElementById('chart-vendas-dia');
@@ -788,38 +716,6 @@ atualizarDashboard();
             },
             options: { responsive:true, maintainAspectRatio:false, plugins:{ legend:{ position:'bottom' } } }
         });
-    }
-
-    // update function
-
-    function updateCharts(days){
-        if (!salesChart) return;
-        const s = gerarDadosVendasPorDia(days);
-        salesChart.data.labels = s.labels;
-        salesChart.data.datasets[0].data = top.values;
-        topChart.update();
-
-        const cat = gerarCategoriasMock();
-        catChart.data.labels = cat.labels;
-        catChart.data.datasets[0].data = cat.values;
-        catChart.update();
-    }
-
-    // create initial
-
-    createCharts(30);
-
-    // controls
-
-    const selRange = document.getElementById('dashboard-range');
-    const btnRefresh = document.getElementById('dashboard-refresh');
-    if (selRange) selRange.addEventListener('change', ()=> updateCharts(parseInt(selRange.value,10)));
-    if (btnRefresh) btnRefresh.addEventListener('click', ()=> updateCharts(parseInt(selRange.value,10) || 30));
-
-    // update programado
-
-    window.DashboardCharts = { updateCharts };
-})();
 
 /* Melhorias: paleta de cores, ferramentas personalizadas e exportação PNG */
 
@@ -899,10 +795,14 @@ atualizarDashboard();
 
 // DASHBOARD MOCK
 
+let salesChart = null;
+let catChart = null;
+
+// Gráfico: Vendas por dia
 const canvasSalesByDay = document.getElementById('chart-vendas-dia');
 
 if (canvasSalesByDay && typeof Chart !== 'undefined') {
-  new Chart(canvasSalesByDay, {
+  salesChart = new Chart(canvasSalesByDay, {
     type: 'line',
     data: {
       labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom'],
@@ -916,13 +816,11 @@ if (canvasSalesByDay && typeof Chart !== 'undefined') {
       }]
     },
     options: {
-      plugins: { legend: { display: false } },
-      responsive: true
+      responsive: true,
+      plugins: { legend: { display: false } }
     }
   });
 }
-
-
 
 // Gráfico Vendas Por Categoria
 
@@ -961,3 +859,19 @@ if (canvasSalesByCategory) {
     }
   });
 }
+
+if(catChart) {
+  catChart.options.plugins.tooltip = {
+    callbacks: {
+      label: (item) => {
+        const total = catChart.data.datasets[0].data
+          .reduce((a, b) => a + b, 0);
+        const pct = ((item.raw / total) * 100).toFixed(1);
+        return `${item.label}: ${item.raw} (${pct}%)`;
+      }
+    }
+  };
+
+  catChart.update();
+}
+
