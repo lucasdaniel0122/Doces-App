@@ -827,12 +827,58 @@ if (canvasSalesByDay && typeof Chart !== 'undefined') {
         borderColor: '#6b3a3a',
         backgroundColor: 'rgba(107, 58, 58, 0.15)',
         tension: 0.35,
-        fill: true
+        fill: true,
+        pointRadius: 4,
+        pointHoverRadius: 7,
+        pointHitRadius: 12,
+        pointBackgroundColor: '#7a3e2e',
+        pointHoverBackgroundColor: '#ffffff',
+        pointHoverBorderColor: '#7a3e2e',
+        borderWidth: 2,
+        hoverBorderWidth: 3
       }]
     },
     options: {
+      animation: {
+        duration: 800,
+        easing: 'easeOutQuart'
+      },
+      interaction: {
+        intersect: false,
+        mode: 'index'
+      },
       responsive: true,
-      plugins: { legend: { display: false } }
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(30, 20, 20, 0.95)',
+          padding: 12,
+          cornerRadius: 8,
+          titleColor: '#ffffff',
+          bodyColor: '#f5eaea',
+          titleFont: { size: 13, weight: '600' },
+          bodyFont: { size: 14, weight: '500' },
+          displayColors: false,
+          callbacks: {
+            label: ctx => ` ${ctx.raw.toLocaleString('pt-BR', {
+              style: 'currency',
+              currency: 'BRL'
+            })}`,
+            label: ctx => `R$ ${ctx.raw.toFixed(2)}`
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: {display: false }
+        },
+        y: {
+          ticks: {
+            callback: v => `R$ ${v}`
+          }
+        }
+      }
     }
   });
 }
@@ -896,9 +942,10 @@ function atualizarGraficoVendas() {
   const dados = calcularVendasPorDia();
 
   salesChart.data.labels = dados.labels;
-  salesChart.data.datasets[0].data = dados.value;
-  salesChart.update();
+  salesChart.data.datasets[0].data = dados.values;
+  salesChart.update('active');
 }
 
 atualizarGraficoVendas();
+
 
