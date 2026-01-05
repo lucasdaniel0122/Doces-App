@@ -53,12 +53,12 @@ function obterVendas() {
     }
   }
 
-  // Dados Exemplo (fallback)
-
+  // Fallback (exemplo)
   return [
-    { data: '2025-03-01', valor: 120, categoria: 'Brigadeiros' },
-    { data: '2025-03-02', valor: 200, categoria: 'Ovos de Páscoa' },
-    { data: '2025-03-03', valor: 150, categoria: 'Bolos no Pote' }
+    { data: '2025-05-01', valor: 120, categoria: 'Brigadeiros' },
+    { data: '2025-05-01', valor: 80, categoria: 'Ovos de Páscoa' },
+    { data: '2025-05-02', valor: 150, categoria: 'Brigadeiros' },
+    { data: '2025-05-02', valor: 200, categoria: 'Bolos' }
   ];
 }
 
@@ -68,6 +68,21 @@ function calcularVendasPorDia() {
 
   vendas.forEach(v => {
     mapa[v.data] = (mapa[v.data] || 0) + v.valor;
+  });
+
+  return {
+    labels: Object.keys(mapa),
+    values: Object.values(mapa)
+  };
+}
+
+function calcularVendasPorCategoria() {
+  const vendas = obterVendas();
+  const mapa = {};
+
+  vendas.forEach(v => {
+    const cat = v.categoria || 'Outros';
+    mapa[cat] = (mapa[cat] || 0) + Number(v.valor || 0);
   });
 
   return {
@@ -885,37 +900,82 @@ if (canvasSalesByDay && typeof Chart !== 'undefined') {
 
 // Gráfico Vendas Por Categoria
 
-const canvasSalesByCategory = document.getElementById('chart-vendas-categoria');
+const canvasCategoria = document.getElementById('chart-vendas-categoria');
 
 let catchart = null;
 
-if (canvasSalesByCategory) {
-  catchart = new Chart(canvasSalesByCategory, {
+if (canvasCategoria && typeof Chart !== 'undefined') {
+  const vendas = obterVendas();
+  const dadosCategoria = calcularVendasPorCategoria(obterVendas());
+  
+  catchart = new Chart(canvasCategoria, {
     type: 'bar',
     data: {
-      labels: [
-        'Brigadeiros',
-        'Ovos de Páscoa',
-        'Bolos no Pote',
-        'Trufas',
-        'Pão de Mel'
-      ],
+      labels: dadosCategoria.labels,
       datasets: [{
-        data: [520, 380, 290, 210, 160],
+        label: 'Vendas por Categoria (R$)',
+        data: dadosCategoria.values,
         backgroundColor: [
-          '#6b3a3a',
-          '#e87f98',
-          '#f2b705',
-          '#a45ee5',
-          '#f28c28'
+          'rgba(122, 62, 46, 0.65)',
+          'rgba(232, 127, 152, 0.65)',
+          'rgba(255, 193, 7, 0.65)',
+          'rgba(111, 66, 193, 0.65)',
+          'rgba(40, 167, 69, 0.65)'
         ],
-        borderRadius: 8
+        borderRadius: 10,
+        borderSkipped: false,
+        hoverBackgroundColor: [
+          '#7a3e2e',
+          '#e87f98',
+          '#ffc107',
+          '#6f42c1',
+          '#28a745'
+        ],
+        hoverBorderWidth: 2,
+        hoverBorderColor: '#ffffff'
       }]
     },
     options: {
       responsive: true,
+      maintainAspectRatio: false,
+      animation: {
+        duration: 800,
+        easing: 'easeOutQuart'
+      },
+      interaction: {
+        mode: 'index',
+        intersect: false
+      },
       plugins: {
-        legend: { display: false }
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(30, 20, 20, 0.95)',
+          padding: 12,
+          cornerRadius: 8,
+          titleColor: '#fff',
+          bodyColor: '#f5eaea',
+          displayColors: false,
+          callbacks: {
+            label: ctx => ctx.raw.toLocaleString('pt-BR', {
+              style: 'currency',
+              currency: 'BRL'
+            })
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: {
+            font: { size: 12 }
+          }
+        },
+        y: {
+          beginAtZero: true,
+          ticks: {
+            callback: v => `R$ ${v}`
+          }
+        }
       }
     }
   });
@@ -939,13 +999,38 @@ if(catChart) {
 function atualizarGraficoVendas() {
   if (!salesChart) return;
 
-  const dados = calcularVendasPorDia();
+  const dadosDia = calcularVendasPorDia();
+  salesChart.data.labels = dadosDia.labels;
+  salesChart.data.datasets[0].data = dadosDia.values;
+  salesChart.update();
 
-  salesChart.data.labels = dados.labels;
-  salesChart.data.datasets[0].data = dados.values;
-  salesChart.update('active');
+  if (catChart) {
+    const dadosCat = calcularVendasPorCategoria();
+    catChart.data.labels = dadosCat.labels;
+    catChart.data.datasets[0].data = dadosCat.values;
+    catChart.update();
+  }
+}
+
+function atualizarGraficoVendas() {
+  if (!salesChart) return;
+
+  // Vendas por dia
+  const dadosDia = calcularVendasPorDia();
+  salesChart.data.labels = dadosDia.labels;
+  salesChart.data.datasets[0].data = dadosDia.values;
+  salesChart.update();
+
+  // Vendas por categoria
+  if (catChart) {
+    const dadosCat = calcularVendasPorCategoria();
+    catChart.data.labels = dadosCat.labels;
+    catChart.data.datasets[0].data = dadosCat.values;
+    catChart.update();
+  }
 }
 
 atualizarGraficoVendas();
+
 
 
