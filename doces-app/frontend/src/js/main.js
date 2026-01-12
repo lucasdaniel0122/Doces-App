@@ -1,4 +1,8 @@
 
+let salesChart = null;
+let catChart = null;
+let topChart = null;
+
 console.log('Chart disponível?', typeof Chart);
 
 console.log('main.js carregado!');
@@ -10,7 +14,6 @@ const DASHBOARD_DATA = {
   produtosVendidos: 67,
   ticketMedio: 68.9
 };
-
 
 /* ======= Configurações / constantes ======= */
 const SIDEBAR_COLLAPSED_W = '72px';
@@ -62,8 +65,16 @@ function obterVendas() {
   ];
 }
 
-function calcularVendasPorDia() {
-  const vendas = obterVendas();
+// Vendas Por Dia
+
+function calcularVendasPorDia(vendas = []) {
+  if (!Array.isArray(vendas) || vendas.length === 0) {
+    return {
+      labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom'],
+      values: [120, 200, 150, 300, 280, 420, 380]
+    };
+  }
+
   const mapa = {};
 
   vendas.forEach(v => {
@@ -74,15 +85,25 @@ function calcularVendasPorDia() {
     labels: Object.keys(mapa),
     values: Object.values(mapa)
   };
+
+  // futuramente: cálculo real a partir do backend
 }
 
-function calcularVendasPorCategoria() {
-  const vendas = obterVendas();
+// Vendas Por Categoria
+
+function calcularVendasPorCategoria(vendas = []) {
+  if (!Array.isArray(vendas) || vendas.length === 0) {
+    return {
+      labels: ['Brigadeiros', 'Ovos', 'Bolos', 'Trufas'],
+      values: [520, 380, 290, 210]
+    };
+  }
+
   const mapa = {};
 
   vendas.forEach(v => {
-    const cat = v.categoria || 'Outros';
-    mapa[cat] = (mapa[cat] || 0) + Number(v.valor || 0);
+    const categoria = v.categoria || 'all';
+    mapa[categoria] = (mapa[categoria] || 0) + v.valor;
   });
 
   return {
@@ -91,10 +112,129 @@ function calcularVendasPorCategoria() {
   };
 }
 
+// Top Produtos
+
+function calcularTopProdutos(periodo = 30) {
+  const vendas = obterVendas();
+  const hoje = new Date();
+  const mapa = {};
+
+  vendas.forEach(v => {
+    const diffDias = (hoje - new Date(v.data)) / 86400000;
+    if (diffDias <= periodo && v.produto) {
+      mapa[v.produto] = (mapa[v.produto] || 0) + 1;
+    }
+  });
+
+  const ordenado = Object.entries(mapa)
+    .sort((a,b) => b[1] - a[1])
+    .slice(0,5);
+
+  return {
+    labels: ordenado.map(i => i[0]),
+    values: ordenado.map(i => i[1])
+  };
+}
+
+// Estilo Dora (Todos os Gráficos)
+
+const chartBaseOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  animation: {
+    duration: 600,
+    easing: 'easeOutQuart'
+  },
+  interaction: {
+    mode: 'index',
+    intersect: false
+  },
+  plugins: {
+    legend: { display: false },
+    tooltip: {
+      backgroundColor: '#2f1b15',
+      titleColor: '#fff',
+      bodyColor: '#fff',
+      cornerRadius: 6,
+      padding: 10,
+      displayColors: false
+    }
+  },
+  scales: {
+    x: {
+      grid: { display: false },
+      ticks: { color: '#6b4a3d' }
+    },
+    y: {
+      grid: { display: false },
+      ticks: {
+        color: '#6b4a3d',
+        callback: v => `R$ ${v}`
+      }
+    }
+  }
+};
+
+// Gráficos (Usando tudo acima)
+
+function criarGraficoVendas(periodo = 30, categoria = 'todas') {
+  const dados = calcularVendasPorDia(periodo, categoria);
+
+  salesChart = new Chart(document.getElementById('chart-vendas-dia'), {
+    type: 'line',
+    data: {
+      labels: dados.labels,
+      datasets: [{
+        data: dados.values,
+        borderColor: '#7a3e2e',
+        backgroundColor: 'rgba(122, 62, 46, 0.15)',
+        tension: 0.35,
+        fill: true,
+        pointRadius: 4,
+        pointHoverRadius: 7
+      }]
+    },
+    options: chartBaseOptions
+  });
+}
+
+function criarGraficoCategoria(periodo = 30) {
+  const dados = calcularVendasPorCategoria(periodo);
+
+  catChart = new Chart(document.getElementById('chart-vendas-categoria'), {
+    type: 'bar',
+    data: {
+      labels: dados.labels,
+      datasets: [{
+        data: dados.values,
+        backgroundColor: '#e87f98',
+        borderRadius: 8
+      }]
+    },
+    options: chartBaseOptions
+  });
+}
+
+function criarGraficoTopProdutos(periodo = 30) {
+  const dados = calcularTopProdutos(periodo);
+
+  topChart = new Chart(document.getElementById('chart-top-produtos'), {
+    type: 'bar',
+    data: {
+      labels: dados.labels,
+      datasets: [{
+        data: dados.values,
+        backgroundColor: '#c97a63'
+      }]
+    },
+    options: chartBaseOptions
+  });
+}
+
 // Gráfico para dados reais
 
   function filtrarVendas() {
-    const vendas = obtervendas();
+    const vendas = obterVendas();
     const hoje = new Date();
     let dias = 7;
 
@@ -825,159 +965,63 @@ if (btnAddVenda) {
 
 // DASHBOARD MOCK
 
-let salesChart = null;
-let catChart = null;
-
 // Gráfico: Vendas por dia
-const canvasSalesByDay = document.getElementById('chart-vendas-dia');
 
-if (canvasSalesByDay && typeof Chart !== 'undefined') {
-  salesChart = new Chart(canvasSalesByDay, {
+function criarGraficoVendasPorDia(vendasFiltradas) {
+  const canvas = document.getElementById('chart-vendas-dia');
+  if (!canvas || typeof Chart === 'undefined') return;
+
+  if (salesChart) {
+    salesChart.destroy();
+    salesChart = null;
+  }
+
+  const data = calcularVendasPorDia(vendasFiltradas);
+
+  salesChart = new Chart(canvas, {
     type: 'line',
     data: {
-      labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom'],
+      labels: data.labels,
       datasets: [{
         label: 'Vendas (R$)',
-        data: [120, 200, 150, 300, 280, 420, 380],
-        borderColor: '#6b3a3a',
-        backgroundColor: 'rgba(107, 58, 58, 0.15)',
-        tension: 0.35,
+        data: data.values,
+        borderColor: '#7a3e2e',
+        backgroundColor: 'rgba(122, 62, 46, 0.2)',
+        tension: 0.4,
         fill: true,
         pointRadius: 4,
         pointHoverRadius: 7,
-        pointHitRadius: 12,
         pointBackgroundColor: '#7a3e2e',
-        pointHoverBackgroundColor: '#ffffff',
-        pointHoverBorderColor: '#7a3e2e',
-        borderWidth: 2,
-        hoverBorderWidth: 3
+        pointHoverBackgroundColor: '#c97a63'
       }]
     },
-    options: {
-      animation: {
-        duration: 800,
-        easing: 'easeOutQuart'
-      },
-      interaction: {
-        intersect: false,
-        mode: 'index'
-      },
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          backgroundColor: 'rgba(30, 20, 20, 0.95)',
-          padding: 12,
-          cornerRadius: 8,
-          titleColor: '#ffffff',
-          bodyColor: '#f5eaea',
-          titleFont: { size: 13, weight: '600' },
-          bodyFont: { size: 14, weight: '500' },
-          displayColors: false,
-          callbacks: {
-            label: ctx => ` ${ctx.raw.toLocaleString('pt-BR', {
-              style: 'currency',
-              currency: 'BRL'
-            })}`,
-            label: ctx => `R$ ${ctx.raw.toFixed(2)}`
-          }
-        }
-      },
-      scales: {
-        x: {
-          grid: {display: false }
-        },
-        y: {
-          ticks: {
-            callback: v => `R$ ${v}`
-          }
-        }
-      }
-    }
+    options: chartBaseOptions
   });
 }
 
 // Gráfico Vendas Por Categoria
 
-const canvasCategoria = document.getElementById('chart-vendas-categoria');
+function criarGraficoCategorias(vendasFiltradas) {
+  const canvas = document.getElementById('chart-vendas-categoria');
+  if (!canvas || typeof Chart === 'undefined') return;
 
-let catchart = null;
+  if (catChart) {
+    catChart.destroy();
+    catChart = null;
+  }
 
-if (canvasCategoria && typeof Chart !== 'undefined') {
-  const vendas = obterVendas();
-  const dadosCategoria = calcularVendasPorCategoria(obterVendas());
-  
-  catchart = new Chart(canvasCategoria, {
+  const data = calcularVendasPorCategoria(vendasFiltradas);
+
+  catChart = new Chart(canvas, {
     type: 'bar',
     data: {
-      labels: dadosCategoria.labels,
+      labels: data.labels,
       datasets: [{
-        label: 'Vendas por Categoria (R$)',
-        data: dadosCategoria.values,
-        backgroundColor: [
-          'rgba(122, 62, 46, 0.65)',
-          'rgba(232, 127, 152, 0.65)',
-          'rgba(255, 193, 7, 0.65)',
-          'rgba(111, 66, 193, 0.65)',
-          'rgba(40, 167, 69, 0.65)'
-        ],
-        borderRadius: 10,
-        borderSkipped: false,
-        hoverBackgroundColor: [
-          '#7a3e2e',
-          '#e87f98',
-          '#ffc107',
-          '#6f42c1',
-          '#28a745'
-        ],
-        hoverBorderWidth: 2,
-        hoverBorderColor: '#ffffff'
+        data: data.values,
+        backgroundColor: ['#f3c6c6', '#f6d365', '#b8e0d2', '#cdb4db']
       }]
     },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      animation: {
-        duration: 800,
-        easing: 'easeOutQuart'
-      },
-      interaction: {
-        mode: 'index',
-        intersect: false
-      },
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          backgroundColor: 'rgba(30, 20, 20, 0.95)',
-          padding: 12,
-          cornerRadius: 8,
-          titleColor: '#fff',
-          bodyColor: '#f5eaea',
-          displayColors: false,
-          callbacks: {
-            label: ctx => ctx.raw.toLocaleString('pt-BR', {
-              style: 'currency',
-              currency: 'BRL'
-            })
-          }
-        }
-      },
-      scales: {
-        x: {
-          grid: { display: false },
-          ticks: {
-            font: { size: 12 }
-          }
-        },
-        y: {
-          beginAtZero: true,
-          ticks: {
-            callback: v => `R$ ${v}`
-          }
-        }
-      }
-    }
+    options: chartBaseOptions
   });
 }
 
@@ -996,26 +1040,39 @@ if(catChart) {
   catChart.update();
 }
 
-function atualizarGraficoVendas() {
-  if (!salesChart) return;
+// Gráfico Top Produtos
 
-  const dadosDia = calcularVendasPorDia();
-  salesChart.data.labels = dadosDia.labels;
-  salesChart.data.datasets[0].data = dadosDia.values;
-  salesChart.update();
+function criarGraficoTopProdutos(periodo = 30) {
+  const canvas = document.getElementById('chart-top-produtos');
+  if (!canvas || typeof Chart === 'undefined') return;
 
-  if (catChart) {
-    const dadosCat = calcularVendasPorCategoria();
-    catChart.data.labels = dadosCat.labels;
-    catChart.data.datasets[0].data = dadosCat.values;
-    catChart.update();
+  if (topChart) {
+    topChart.destroy();
+    topChart = null;
   }
+
+  const dados = calcularTopProdutos(periodo);
+
+  topChart = new Chart(canvas, {
+    type: 'bar',
+    data: {
+      labels: dados.labels,
+      datasets: [{
+        data: dados.values,
+        backgroundColor: '#c97a63',
+        borderRadius: 8
+      }]
+    },
+    options: chartBaseOptions
+  });
 }
+
 
 function atualizarGraficoVendas() {
   if (!salesChart) return;
 
   // Vendas por dia
+  const periodo = 30;
   const dadosDia = calcularVendasPorDia();
   salesChart.data.labels = dadosDia.labels;
   salesChart.data.datasets[0].data = dadosDia.values;
@@ -1030,7 +1087,48 @@ function atualizarGraficoVendas() {
   }
 }
 
-atualizarGraficoVendas();
+// Filtros (período + categoria)
 
+function atualizarDashboard() {
+  const filtroPeriodoEl = document.getElementById('dashboard-filters');
+  const filtroCategoriaEl = document.getElementById('dashboard-category');
 
+  const periodo = filtroPeriodoEl ? parseInt(filtroPeriodoEl.value, 10) : 30;
+  const categoria = filtroCategoriaEl ? filtroCategoriaEl.value : 'all';
 
+  let vendas = obterVendas();
+
+  // filtro por período
+  const hoje = new Date();
+  vendas = vendas.filter(v => {
+    const diff = (hoje - new Date(v.data)) / 86400000;
+    return diff <= periodo;
+  });
+
+  // filtro por categoria
+  if (categoria !== 'all') {
+    vendas = vendas.filter(v => v.categoria === categoria);
+  }
+
+  criarGraficoVendasPorDia(vendas);
+  criarGraficoCategorias(vendas);
+  criarGraficoTopProdutos(periodo);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+
+  // Listeners dos filtros dashboard
+  const filtroPeriodoEl = document.getElementById('dashboard-filters');
+  const filtroCategoriaEl = document.getElementById('dashboard-category');
+
+  if (filtroPeriodoEl) {
+    filtroPeriodoEl.addEventListener('change', atualizarDashboard);
+  }
+
+  if (filtroCategoriaEl) {
+    filtroCategoriaEl.addEventListener('change', atualizarDashboard);
+  }
+
+  // Chamada única
+  atualizarDashboard();
+});
