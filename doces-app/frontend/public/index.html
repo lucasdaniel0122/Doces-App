@@ -40,80 +40,6 @@
 
 <!--Main Content-->
 
-    <section class="dashboard">
-    <h2 class="dashboard-title">Resumo do dia</h2>
-
-    <div class="dashboard-grid">
-
-        <div class="dash-card">
-            <h3>Vendas Hoje</h3>
-            <p class="value" id="vendas-hoje">R$ 0,00</p>
-        </div><!-- div dash-card (fim) -->
-
-        <div class="dash-card">
-            <h3>Pedidos Pendentes</h3>
-            <p class="value" id="vendas-hoje">0</p>
-        </div><!-- div dash-card2 (fim) -->
-
-        <div class="dash-card">
-            <h3>Produtos Cadastrados</h3>
-            <p class="value" id="produtos-total">0</p>
-        </div><!-- div dash-card3 (fim) -->
-
-        <div class="dash-card">
-            <h3>Estoque Crítico</h3>
-            <p class="value" id="estoque-critico">0</p>
-        </div><!-- div dash-card4 (fim) -->
-
-        <div class="dash-card">
-            <h3>Total do Mês</h3>
-            <p class="value" id="total-mes">R$ 0,00</p>
-        </div><!-- div dash-card5 (fim) -->
-    </div><!-- div dashboard-grid (fim) -->
-
-<!-- ===== DASHBOARD - GRÁFICOS ===== -->
-<div class="dashboard-charts" style="margin-top:18px;">
-  <div class="charts-controls" style="display: flex; align-items: center; flex-wrap: wrap; gap: 12px;">
-    <label for="dashboard-range">Período:</label>
-      <div class="filter-cat">
-    <select id="dashboard-range">
-      <option value="7">Últimos 7 dias</option>
-      <option value="30" selected>Últimos 30 dias</option>
-      <option value="90">Últimos 90 dias</option>
-    </select>
-      </div>
-    <button id="dashboard-refresh" class="btn outline">Atualizar</button>
-  </div>
-
-    <!-- Botões Export -->
-    <div class="export-buttons" aria-hidden="false">
-        <div style="margin-left: 8px; display: flex; align-items: center;">
-            <button id="export-sales-day" class="btn outline"> PNG (Vendas)</button>
-            <button id="export-sales-top" class="btn outline"> PNG (Top)</button>
-            <button id="export-sales-categories" class="btn outline"> PNG (Categorias)</button>
-        </div>
-    </div>
-
-  <div class="charts-grid">
-    <div class="chart-card">
-      <h4>Vendas por dia</h4>
-      <canvas id="chart-vendas-dia" aria-label="Gráfico de vendas por dia" role="img"></canvas>
-    </div>
-
-    <div class="chart-card">
-      <h4>Produtos mais vendidos</h4>
-      <canvas id="chart-top-products" aria-label="Gráfico de produtos mais vendidos" role="img"></canvas>
-    </div>
-
-    <div class="chart-card">
-      <h4>Participação por categoria</h4>
-      <canvas id="chart-vendas-categoria" aria-label="Gráfico de participação por categoria" role="img"></canvas>
-    </div>
-  </div>
-</div>
-<!-- ===== FIM DASHBOARD - GRÁFICOS ===== -->
-        
-</section><!-- section dashboard (fim) -->
 <div class="main">
 
     <!--Topbar-->
@@ -158,6 +84,31 @@
 
     <!--Page body-->
     <main class="content" role="main">
+
+        <!-- Sessão de Produtos -->
+        <section class="products-section">
+
+            <!-- Cabeçalho -->
+            <div class="products-header">
+                <h2>Produtos</h2>
+
+                <div class="products-filters">
+                    <input type="text" id="product-search" placeholder="Buscar produto..." arial-label="Buscar produto..."/>
+
+                    <select id="product-category">
+                        <option value="all">Todas as Categorias</option>
+                        <option value="brigadeiros">Brigadeiros</option>
+                        <option value="ovos">Ovos de Páscoa</option>
+                        <option value="bolos">Bolos de Pote</option>
+                        <option value="cones">Cones Trufados</option>
+                        <option value="trufas">Trufas</option>
+                    </select><!-- product-category (fim) -->
+                </div><!-- div products-filters (fim) -->
+            </div><!-- div products-header (fim) -->
+
+            <!-- Grid de produtos -->
+            <div class="products-grid" id="products-grid"></div><!-- div products-grid (fim) -->
+        </section><!-- products section (fim) -->
 
         <!-- DASHBOARD -->
        <section class="dashboard">
@@ -341,3 +292,4 @@
 </body>
 
 </html>
+
