@@ -1,6 +1,6 @@
 # Frontend - Sistema de Gestão de Doces
 
-Este diretório guarda toda a aprte visual e interativa do sistema. Aqui ficam as telas, o design, os componentes e tudo o que usuário vê no dia a dia.
+Este diretório guarda toda a parte visual e interativa do sistema. Aqui ficam as telas, o design, os componentes e tudo o que usuário vê no dia a dia.
 
 A proposta é uma interface limpa, rápida e intuitiva - foco em usabilidade e navegação simples. Vamos começar com HTML/CSS/JS puro e, se necessário, migrar para um framework (React/Vite) no futuro.
 
@@ -44,4 +44,5 @@ Quando integrarmos com o backend, usaremos um servidor local.
 - Implementar JavaScript para tornar as telas interativas;
 
 - Preparar integrações futuras com o backend em Flask;
+
 
