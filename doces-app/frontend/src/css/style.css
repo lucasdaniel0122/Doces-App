@@ -1091,6 +1091,55 @@ button, .btn {
     }
 }
 
+/* Products Section */
+
+#products-section {
+   margin-top: 24px;
+   padding: 20px;
+   background: #fff;
+   border-radius: 14px;
+   box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+/* Cabeçalho */
+
+#products-header {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   gap: 16px;
+   margin-bottom: 18px;
+}
+
+#products-header h2 {
+   font-size: 1.2rem;
+   font-weight: 600;
+}
+
+/* Filtros */
+
+#products-filters {
+   display: flex;
+   gap: 12px;
+}
+
+#products-filters input,
+#products-filters select {
+   padding: 10px 14px;
+   border-radius: 10px;
+   border: 1px solid #ddd;
+   font-size: 0.9rem;
+   background: #fafafa;
+}
+
+/* Grid */
+
+#products-grid {
+   display: grid;
+   grid-template-columns: repeat(auto-fill, minmax(180, 1fr));
+   gap: 16px;
+}
+
 /* Estilo do filtro + paleta dashboard */
 
 /* Paleta personalizada (use em charts) */
@@ -1375,3 +1424,4 @@ button, .btn {
     grid-template-columns: 1fr;
   }
 }
+
